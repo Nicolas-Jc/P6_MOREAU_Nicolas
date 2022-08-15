@@ -7,18 +7,15 @@ import java.time.LocalDate;
 
 @Entity
 @DynamicUpdate
-@Table(name ="user_transaction")
-public class UserTransaction {
+@Table(name ="bank_transaction")
+public class BankTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_transaction_id")
-    private Integer userTransactionId;
+    @Column(name="bank_transaction_id")
+    private Integer bankTransactionId;
 
     @Column(name="amount")
     private Float amount;
-
-    @Column(name="fee")
-    private Float fee;
 
     @Column(name="transaction_date")
     private LocalDate transactionDate;
@@ -27,11 +24,15 @@ public class UserTransaction {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "sender_id", referencedColumnName = "user_id")
-    private User sender;
-
-    @ManyToOne
-    @JoinColumn(name = "receiver_id", referencedColumnName = "user_id")
+    @JoinColumn(name = "owner_id", referencedColumnName = "user_id")
     private User receiver;
+
+    @ManyToOne(
+            cascade = CascadeType.ALL
+    )
+    @JoinColumn(name="bank_account_id")
+    private BankAccount bankAccount;
+
+
 
 }
