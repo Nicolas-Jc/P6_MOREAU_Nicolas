@@ -34,4 +34,72 @@ public class UserTransaction {
     @JoinColumn(name = "receiver_id", referencedColumnName = "user_id")
     private User receiver;
 
+
+    public UserTransaction()
+    {}
+    public UserTransaction(Integer userTransactionId, Float amount, Float fee, LocalDate transactionDate, String description, User sender, User receiver) {
+        this.userTransactionId = userTransactionId;
+        this.amount = amount;
+        this.fee = fee;
+        this.transactionDate = transactionDate;
+        this.description = description;
+        this.sender = sender;
+        this.receiver = receiver;
+    }
+
+    public Integer getUserTransactionId() {
+        return userTransactionId;
+    }
+
+    public void setUserTransactionId(Integer userTransactionId) {
+        this.userTransactionId = userTransactionId;
+    }
+
+    public Float getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Float amount) {
+        this.amount = amount;
+    }
+
+    public Float getFee() {
+        return fee;
+    }
+
+    public void setFee(Float fee) {
+        this.fee = fee;
+    }
+
+    public LocalDate getTransactionDate() {
+        return transactionDate;
+    }
+
+    public void setTransactionDate(LocalDate transactionDate) {
+        this.transactionDate = transactionDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public User getSender() {
+        return sender;
+    }
+
+    public void setSender(User sender) {
+        this.sender = sender;
+    }
+
+    public User getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(User receiver) {
+        this.receiver = receiver;
+    }
 }
