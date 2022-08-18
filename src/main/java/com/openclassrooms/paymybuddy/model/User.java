@@ -26,7 +26,7 @@ public class User {
     @Column(name="firstname")
     private String firstname;
 
-    @Column(name="email", nullable = false,unique =true)
+    @Column(name="email")
     @NotNull
     private String email;
 
@@ -37,7 +37,7 @@ public class User {
     @Column(name="balance")
     private Float balance;
 
-    @OneToMany(
+    /*@OneToMany(
             // Toute action sur User sera propagée sur UserTransaction
             cascade = CascadeType.ALL,
             // Si on supprime une userTransaction de la liste, elle est supprimée de la BDD
@@ -46,6 +46,7 @@ public class User {
             fetch = FetchType.EAGER)
     @JoinColumn(name = "receiver_id")
     List<UserTransaction> userTransactions = new ArrayList<>();
+    */
 
     // LAZY => à la récupération du USer, la liste des contacts n'est pas récupérée
     // meilleures performances
@@ -64,7 +65,17 @@ public class User {
         this.email = email;
         this.password = password;
         this.balance = balance;
-        this.userTransactions = userTransactions;
+        //this.userTransactions = userTransactions;
+        this.contactsList = contactsList;
+    }
+
+    // Constructeur spécifique
+    public User(String lastname, String firstname, String email, String password, Float balance,List<User> contactsList ) {
+        this.lastname = lastname;
+        this.firstname = firstname;
+        this.email = email;
+        this.password = password;
+        this.balance = balance;
         this.contactsList = contactsList;
     }
 
@@ -116,13 +127,13 @@ public class User {
         this.balance = balance;
     }
 
-    public List<UserTransaction> getUserTransactions() {
+    /*public List<UserTransaction> getUserTransactions() {
         return userTransactions;
-    }
+    }*/
 
-    public void setUserTransactions(List<UserTransaction> userTransactions) {
+    /*public void setUserTransactions(List<UserTransaction> userTransactions) {
         this.userTransactions = userTransactions;
-    }
+    }*/
 
     public List<User> getContactsList() {
         return contactsList;
