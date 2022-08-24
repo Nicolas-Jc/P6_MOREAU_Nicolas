@@ -13,29 +13,33 @@ import java.util.Set;
 
 @Entity
 @DynamicUpdate
-@Table(name ="user")
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_id")
+    @Column(name = "user_id")
     private Integer userId;
 
-    @Column(name="lastname")
+    @Column(name = "lastname")
     private String lastname;
 
-    @Column(name="firstname")
+    @Column(name = "firstname")
     private String firstname;
 
-    @Column(name="email")
+    @Column(name = "email")
     @NotNull
     private String email;
 
-    @Column(name="password")
+    @Column(name = "password")
     @NotNull
     private String password;
 
-    @Column(name="balance")
+    @Column(name = "balance")
     private Float balance;
+
+    @OneToOne
+    @JoinColumn(name = "bank_account_Id", referencedColumnName = "bank_account_id")
+    private BankAccount bankAccount;
 
     /*@OneToMany(
             // Toute action sur User sera propagée sur UserTransaction
@@ -50,13 +54,13 @@ public class User {
 
     // LAZY => à la récupération du USer, la liste des contacts n'est pas récupérée
     // meilleures performances
-    @OneToMany (fetch = FetchType.LAZY)
-    @JoinTable(name ="connection", joinColumns = @JoinColumn(name ="user_id"),
-            inverseJoinColumns = @JoinColumn(name ="user_contact_id"))
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "connection", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_contact_id"))
     private List<User> contactsList = new ArrayList<>();
 
-    public User()
-    {}
+    public User() {
+    }
 
     public User(Integer userId, String lastname, String firstname, String email, String password, Float balance, List<UserTransaction> userTransactions, List<User> contactsList) {
         this.userId = userId;
@@ -70,7 +74,7 @@ public class User {
     }
 
     // Constructeur spécifique
-    public User(String lastname, String firstname, String email, String password, Float balance,List<User> contactsList ) {
+    public User(String lastname, String firstname, String email, String password, Float balance, List<User> contactsList) {
         this.lastname = lastname;
         this.firstname = firstname;
         this.email = email;
@@ -125,6 +129,14 @@ public class User {
 
     public void setBalance(Float balance) {
         this.balance = balance;
+    }
+
+    public BankAccount getBankAccount() {
+        return bankAccount;
+    }
+
+    public void setBankAccount(BankAccount bankAccount) {
+        this.bankAccount = bankAccount;
     }
 
     /*public List<UserTransaction> getUserTransactions() {

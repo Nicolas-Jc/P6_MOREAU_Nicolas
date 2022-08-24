@@ -17,16 +17,11 @@ public class UserService {
     public Iterable<User> getUsers() {
         return userRepository.findAll();
     }
-    public User getUserByEmail(String email) {
-        logger.info("email to find: {}",email);
-        return userRepository.findByEmail(email);
-    }
 
     public User addUser(User user) {
         User verifUserToAdd = getUserByEmail(user.getEmail());
         // Email inexistant en base. Création User possible
-        if(verifUserToAdd == null)
-        {
+        if (verifUserToAdd == null) {
             User newUser = new User();
             newUser.setLastname(user.getLastname());
             newUser.setFirstname(user.getFirstname());
@@ -39,7 +34,34 @@ public class UserService {
             logger.info("User added DDB");
             return newUser;
         }
+        logger.info("User exists Not Create");
         return verifUserToAdd;
+    }
+
+    // AUTRES METHODES A PREVOIR
+    // updateUser
+    // addContacts
+    // updateBalance
+
+    public User getUserByEmail(String email) {
+        return userRepository.findUserByEmail(email);
+    }
+
+    public User updateUser(String userEmail, String lastName, String firstName, String password) {
+        User userToUpdate = userRepository.findUserByEmail(userEmail);
+        // User existant. Seules les informations Lastname, firstname, password
+        // peuvent être mises à jour
+        if (userToUpdate.getEmail().equals(userEmail)) {
+            logger.info("userToUpdate : " + userToUpdate);
+            userToUpdate.setLastname(lastName);
+            userToUpdate.setFirstname(firstName);
+            userToUpdate.setPassword(password);
+            userRepository.saveAndFlush(userToUpdate);
+        } else {
+            logger.info("User not exists");
+        }
+        logger.info("User updated and saved");
+        return userToUpdate;
     }
 
 

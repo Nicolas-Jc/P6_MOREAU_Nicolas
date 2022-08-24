@@ -10,10 +10,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.*;
 
 
@@ -31,28 +34,25 @@ public class UserServiceTests {
     List<User> contactsListTest;
 
     @BeforeEach
-    void dataSets()
-    {
+    void dataSets() {
         contactsListTest = new ArrayList<>();
-        userTestExistDB = new User("NomUser1","PrenomUser1","mailuser1@gmail.com", "123456", 0.00f,contactsListTest);
-        userTestNotExistDB = new User("NomUserNotExistDB","PrenomUserNotExistDB","mailuserNotExistDB@gmail.com", "123456", 0.00f,contactsListTest);
+        userTestExistDB = new User("NomUser1", "PrenomUser1", "mailuser1@gmail.com", "123456", 0.00f, contactsListTest);
+        userTestNotExistDB = new User("NomUserNotExistDB", "PrenomUserNotExistDB", "mailuserNotExistDB@gmail.com", "123456", 0.00f, contactsListTest);
     }
 
     @Test
-    void GetUserByEmailTest()
-    {
+    void GetUserByEmailTest() {
         // GIVEN
-        when(userRepository.findByEmail(userTestExistDB.getEmail())).thenReturn(userTestExistDB);
+        when(userRepository.findUserByEmail(userTestExistDB.getEmail())).thenReturn(userTestExistDB);
         // WHEN
-        User userToTest = userService.getUserByEmail(userTestExistDB.getEmail());
+        User userTest = userService.getUserByEmail(userTestExistDB.getEmail());
         // THEN
-        assertEquals(userTestExistDB, userToTest);
-        verify(userRepository, Mockito.times(1)).findByEmail(userTestExistDB.getEmail());
+        assertEquals(userTestExistDB, userTest);
+        verify(userRepository, Mockito.times(1)).findUserByEmail(userTestExistDB.getEmail());
     }
 
     @Test
-    void AddNotExistUserTest()
-    {   // GIVEN - retour null - inexistant en BDD
+    void AddNotExistUserTest() {   // GIVEN - retour null - inexistant en BDD
         when(userService.getUserByEmail(userTestNotExistDB.getEmail())).thenReturn(null);
         // WHEN
         User userToAdd = userService.addUser(userTestNotExistDB);
@@ -66,8 +66,7 @@ public class UserServiceTests {
     }
 
     @Test
-    void AddExistUserTest()
-    {
+    void AddExistUserTest() {
         // GIVEN --- retour <> null
         when(userService.getUserByEmail(userTestExistDB.getEmail())).thenReturn(userTestExistDB);
         // WHEN
@@ -76,8 +75,22 @@ public class UserServiceTests {
         assertEquals(userTestExistDB, userToAdd);
     }
 
+    // --------------------------------------------------------------------------------
 
-
+    @Test
+    void UpdateUserTest() {
+        // GIVEN
+        when(userRepository.findUserByEmail(userTestExistDB.getEmail())).thenReturn(userTestExistDB);
+        // WHEN
+        User userExistsToUpdate = userService.updateUser(
+                userTestExistDB.getEmail(),
+                userTestExistDB.getLastname(),
+                userTestExistDB.getFirstname(),
+                userTestExistDB.getPassword());
+        // THEN
+        assertEquals(userTestExistDB, userExistsToUpdate);
+        verify(userRepository, Mockito.times(1)).findUserByEmail(userTestExistDB.getEmail());
+    }
 
     /*@Test
     public void newUserCreationSavedInDDBTest() {
