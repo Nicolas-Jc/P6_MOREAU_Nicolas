@@ -66,7 +66,7 @@ public class UserService {
 
     public User addContact(User user, User contactToAdd) {
         user.addUserContact(contactToAdd);
-        //userRepository.saveAndFlush(user);
+        userRepository.saveAndFlush(user);
         logger.info("User added to connection");
         return contactToAdd;
     }

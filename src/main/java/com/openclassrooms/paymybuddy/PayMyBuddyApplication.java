@@ -2,8 +2,10 @@ package com.openclassrooms.paymybuddy;
 
 import com.openclassrooms.paymybuddy.model.BankAccount;
 import com.openclassrooms.paymybuddy.model.User;
+import com.openclassrooms.paymybuddy.model.UserTransaction;
 import com.openclassrooms.paymybuddy.repository.UserRepository;
 import com.openclassrooms.paymybuddy.service.BankAccountService;
+import com.openclassrooms.paymybuddy.service.BankTransactionService;
 import com.openclassrooms.paymybuddy.service.UserService;
 import com.openclassrooms.paymybuddy.service.UserTransactionService;
 import org.apache.logging.log4j.LogManager;
@@ -33,6 +35,9 @@ public class PayMyBuddyApplication implements CommandLineRunner {
     private UserTransactionService userTransactionService;
 
     @Autowired
+    private BankTransactionService bankTransactionService;
+
+    @Autowired
     private UserRepository userRepository;
 
     public static void main(String[] args) {
@@ -50,7 +55,7 @@ public class PayMyBuddyApplication implements CommandLineRunner {
         User user2 = new User("NomUserCodeAdded2", "PrenomCodeAddedUser2", "mailuser2CodeAdded@gmail.com", "123456", 0.00f, contactsListTest);
         User contactToAdd = new User("NomContactToAdd", "PrenomContactToAdd", "mailContactToAdd@gmail.com", "123456", 0.00f, contactsListTest);
 
-        //User userToAdd1 = userService.addUser(user1);
+        //User userToAdd1 = userService.addUser(user1);user
         userService.addUser(user1);
         userService.addUser(user2);
         userService.addUser(contactToAdd);
@@ -100,10 +105,12 @@ public class PayMyBuddyApplication implements CommandLineRunner {
 
         // -------------------------------------------------
         logger.info("ADD CONTACT TO USER1");
-        // ATTENTION BUG - CREATION DE DOUBLON DANS USER !!!!!!
+        // ******** ATTENTION BUG - CREATION DE DOUBLON DANS USER ****** !!!!!!
         // Requête sur User1
         User userToAddContact = userService.getUserByEmail("mailuser1CodeAdded@gmail.com");
-        userService.addContact(userToAddContact, contactToAdd);
+        User contactToAddUser = userService.getUserByEmail("mailContactToAdd@gmail.com");
+
+        userService.addContact(userToAddContact, contactToAddUser);
 
         // -------------------------------------------------
         logger.info("SEND MONEY FROM USER1 TO USER2");
@@ -114,5 +121,20 @@ public class PayMyBuddyApplication implements CommandLineRunner {
                 "mailuser2CodeAdded@gmail.com",
                 "Test_Send_Money",
                 20.00f);
+
+        // -------------------------------------------------
+        logger.info("ADD MONEY TO BALANCE USER1");
+        User user1AddMoneyBalance = userService.getUserByEmail("mailuser1CodeAdded@gmail.com");
+        bankTransactionService.depositMoneyToBalance(user1AddMoneyBalance, 50000f);
+
+        // -------------------------------------------------
+        logger.info("WITHDRAW MONEY FROM BALANCE USER1");
+        User user1WithdrawMoneyFromBalance = userService.getUserByEmail("mailuser1CodeAdded@gmail.com");
+        bankTransactionService.withdrawMoneyFromBalance(user1WithdrawMoneyFromBalance, 9999f);
+
+        // -----------------------------------------------------
+        /*logger.info("Récupération Liste de toutes les transactions du User en cours");
+        Iterable<UserTransaction> userTransactions = userTransactionService.getUserTransactions();
+        userTransactions.forEach(userTransaction -> System.out.println(userTransaction.getUserTransactionId()));*/
     }
 }

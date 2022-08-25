@@ -2,14 +2,12 @@ package com.openclassrooms.paymybuddy.service;
 
 import com.openclassrooms.paymybuddy.model.User;
 import com.openclassrooms.paymybuddy.model.UserTransaction;
-import com.openclassrooms.paymybuddy.repository.UserRepository;
 import com.openclassrooms.paymybuddy.repository.UserTransactionRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Service
@@ -24,7 +22,7 @@ public class UserTransactionService {
 
     private final LocalDateTime dateTime = LocalDateTime.now();
 
-    private static final float FEE = 0.005f;
+    private static final float FEE_RATE = 0.005f;
 
 
     // METHODES A PREVOIR
@@ -32,10 +30,14 @@ public class UserTransactionService {
     // Appel updateBalance dans UserService
     // getTransactionsBySender / Receiver
 
+    public Iterable<UserTransaction> getUserTransactions() {
+        return userTransactionRepository.findAll();
+    }
+
     public UserTransaction sendMoney(User sender, String emailReceiver, String description, Float amount) {
         User receiver = userService.getUserByEmail(emailReceiver);
         // Montant des frais
-        Float feeAmount = amount * FEE;
+        Float feeAmount = amount * FEE_RATE;
         // Montant envoyé Net de frais
         Float receiveAmount = amount - feeAmount;
 
@@ -51,7 +53,7 @@ public class UserTransactionService {
         sender.setBalance(senderBalance - amount);
         receiver.setBalance(receiverBalance + receiveAmount);
 
-        UserTransaction transaction = new UserTransaction(sender, receiver, dateTime, receiveAmount, description, FEE);
+        UserTransaction transaction = new UserTransaction(sender, receiver, dateTime, receiveAmount, description, FEE_RATE);
         userTransactionRepository.save(transaction);
         logger.info("Transaction has been saved " + transaction);
         return transaction;

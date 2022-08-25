@@ -69,6 +69,15 @@ public class User {
                     name = "user_contact_id", referencedColumnName = "user_id"))
     private List<User> contactsList = new ArrayList<>();
 
+    // A la récupération du User, toutes les userTransactions sont récupérées
+    /*@OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private List<UserTransaction> userTransactions = new ArrayList<>();*/
+
+
     public User() {
     }
 

@@ -3,48 +3,45 @@ package com.openclassrooms.paymybuddy.model;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @DynamicUpdate
-@Table(name ="bank_transaction")
+@Table(name = "bank_transaction")
 public class BankTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="bank_transaction_id")
+    @Column(name = "bank_transaction_id")
     private Integer bankTransactionId;
 
-    @Column(name="amount")
+    @Column(name = "amount")
     private Float amount;
 
-    @Column(name="transaction_date")
-    private LocalDate transactionDate;
+    @Column(name = "transaction_date")
+    private LocalDateTime transactionDate;
 
-    @Column(name="description")
-    private String description;
-
-    @Column(name="movement_Type")
+    @Column(name = "movement_Type")
     private String movementType;
 
     @ManyToOne
     @JoinColumn(name = "owner_id", referencedColumnName = "user_id")
-    private User receiver;
+    private User owner;
 
     @ManyToOne(
             cascade = CascadeType.ALL
     )
-    @JoinColumn(name="bank_account_id")
+    @JoinColumn(name = "bank_account_id")
     private BankAccount bankAccount;
 
-    public BankTransaction()
-    {}
-    public BankTransaction(Integer bankTransactionId, Float amount, LocalDate transactionDate, String description, String movementType, User receiver, BankAccount bankAccount) {
+    public BankTransaction() {
+    }
+
+    public BankTransaction(Integer bankTransactionId, Float amount, LocalDateTime transactionDate, String movementType, User owner, BankAccount bankAccount) {
         this.bankTransactionId = bankTransactionId;
         this.amount = amount;
         this.transactionDate = transactionDate;
-        this.description = description;
         this.movementType = movementType;
-        this.receiver = receiver;
+        this.owner = owner;
         this.bankAccount = bankAccount;
     }
 
@@ -64,21 +61,14 @@ public class BankTransaction {
         this.amount = amount;
     }
 
-    public LocalDate getTransactionDate() {
+    public LocalDateTime getTransactionDate() {
         return transactionDate;
     }
 
-    public void setTransactionDate(LocalDate transactionDate) {
+    public void setTransactionDate(LocalDateTime transactionDate) {
         this.transactionDate = transactionDate;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public String getMovementType() {
         return movementType;
@@ -88,12 +78,12 @@ public class BankTransaction {
         this.movementType = movementType;
     }
 
-    public User getReceiver() {
-        return receiver;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setReceiver(User receiver) {
-        this.receiver = receiver;
+    public void setOwner(User receiver) {
+        this.owner = receiver;
     }
 
     public BankAccount getBankAccount() {
