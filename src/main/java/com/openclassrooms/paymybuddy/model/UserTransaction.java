@@ -4,26 +4,27 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @DynamicUpdate
-@Table(name ="user_transaction")
+@Table(name = "user_transaction")
 public class UserTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_transaction_id")
+    @Column(name = "user_transaction_id")
     private Integer userTransactionId;
 
-    @Column(name="amount")
+    @Column(name = "amount")
     private Float amount;
 
-    @Column(name="fee")
+    @Column(name = "fee")
     private Float fee;
 
-    @Column(name="transaction_date")
-    private LocalDate transactionDate;
+    @Column(name = "transaction_date")
+    private LocalDateTime transactionDate;
 
-    @Column(name="description")
+    @Column(name = "description")
     private String description;
 
     @ManyToOne
@@ -35,9 +36,10 @@ public class UserTransaction {
     private User receiver;
 
 
-    public UserTransaction()
-    {}
-    public UserTransaction(Integer userTransactionId, Float amount, Float fee, LocalDate transactionDate, String description, User sender, User receiver) {
+    public UserTransaction() {
+    }
+
+    public UserTransaction(Integer userTransactionId, Float amount, Float fee, LocalDateTime transactionDate, String description, User sender, User receiver) {
         this.userTransactionId = userTransactionId;
         this.amount = amount;
         this.fee = fee;
@@ -45,6 +47,15 @@ public class UserTransaction {
         this.description = description;
         this.sender = sender;
         this.receiver = receiver;
+    }
+
+    public UserTransaction(User sender, User receiver, LocalDateTime dateTime, Float receiveAmount, String description, float fee) {
+        this.sender = sender;
+        this.receiver = receiver;
+        this.transactionDate = dateTime;
+        this.amount = receiveAmount;
+        this.description = description;
+        this.fee = fee;
     }
 
     public Integer getUserTransactionId() {
@@ -71,11 +82,11 @@ public class UserTransaction {
         this.fee = fee;
     }
 
-    public LocalDate getTransactionDate() {
+    public LocalDateTime getTransactionDate() {
         return transactionDate;
     }
 
-    public void setTransactionDate(LocalDate transactionDate) {
+    public void setTransactionDate(LocalDateTime transactionDate) {
         this.transactionDate = transactionDate;
     }
 

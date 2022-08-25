@@ -39,8 +39,8 @@ public class UserService {
     }
 
     // AUTRES METHODES A PREVOIR
-    // updateUser
     // addContacts
+    // deleteContacts
     // updateBalance
 
     public User getUserByEmail(String email) {
@@ -64,5 +64,32 @@ public class UserService {
         return userToUpdate;
     }
 
+    public User addContact(User user, User contactToAdd) {
+        user.addUserContact(contactToAdd);
+        //userRepository.saveAndFlush(user);
+        logger.info("User added to connection");
+        return contactToAdd;
+    }
+
+    /*public User removeContact(User user, User contactToRemove) {
+        user.removeUserContact(contactToRemove);
+        //userRepository.saveAndFlush(user);
+        logger.info("User removed from connection");
+        return contactToRemove;
+    }*/
+
+    public User updateBalance(String userEmail, Float amount) {
+        User userToUpdateBalance = userRepository.findUserByEmail(userEmail);
+        // User existant.
+        if (userToUpdateBalance.getEmail().equals(userEmail)) {
+            logger.info("userToUpdateBalance : " + userToUpdateBalance);
+            userToUpdateBalance.setBalance(amount);
+            userRepository.saveAndFlush(userToUpdateBalance);
+        } else {
+            logger.info("User not exists");
+        }
+        logger.info("User Balance updated and saved");
+        return userToUpdateBalance;
+    }
 
 }

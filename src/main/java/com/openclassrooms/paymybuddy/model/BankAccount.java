@@ -46,6 +46,12 @@ public class BankAccount {
         this.user = user;
     }
 
+    public BankAccount(String newBankName, String newIban, String newbic) {
+        this.bankName = newBankName;
+        this.iban = newIban;
+        this.bic = newbic;
+    }
+
 
     public Integer getBankAccountId() {
         return bankAccountId;

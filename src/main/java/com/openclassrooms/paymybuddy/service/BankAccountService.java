@@ -20,12 +20,6 @@ public class BankAccountService {
     // addBankAccount
     // updateBankAccount
 
-    /*public User getUserByEmail(String email) {
-        return userRepository.findUserByEmail(email);
-    }*/
-    /*public BankAccount getBankAccountByUserId(Integer userId) {
-        return bankAccountRepository.findBankAccountByUser(userId);
-    }*/
 
     public BankAccount addBankAccount(BankAccount bankAccount) {
 
@@ -51,6 +45,28 @@ public class BankAccountService {
         }
         logger.info("One BankAccount already exists - Not Create");
         return userToAddBankAccount;
+    }
+
+    public BankAccount updateBankAccount(Integer bankAccountId, BankAccount accountToUpdate) {
+        BankAccount bankAccountToFind = getBankAccountById(bankAccountId);
+        // Le compte bancaire existe
+        if (bankAccountToFind != null) {
+            bankAccountToFind.setBankName(accountToUpdate.getBankName());
+            bankAccountToFind.setIban(accountToUpdate.getIban());
+            bankAccountToFind.setBic(accountToUpdate.getBic());
+
+            bankAccountRepository.saveAndFlush(bankAccountToFind);
+        } else {
+            logger.info("Bank account not exists");
+        }
+        logger.info("Bank account updated and saved in DDB");
+        return bankAccountToFind;
+    }
+
+    public BankAccount getBankAccountById(Integer bankId) {
+        BankAccount baToFind = bankAccountRepository.getReferenceById(bankId);
+        logger.info("Bank account exists");
+        return baToFind;
     }
 
 

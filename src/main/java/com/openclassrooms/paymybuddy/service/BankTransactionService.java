@@ -9,5 +9,5 @@ public class BankTransactionService {
     // METHODES A PREVOIR
     // creditAccount
     // debitAccount
-    // AppelUpdateBalance
+    // Appel updateBalance dans UserService
 }

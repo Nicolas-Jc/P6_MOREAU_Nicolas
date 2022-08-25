@@ -2,6 +2,7 @@ package com.openclassrooms.paymybuddy.model;
 
 import com.sun.istack.NotNull;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Generated;
 import javax.persistence.*;
@@ -54,9 +55,18 @@ public class User {
 
     // LAZY => à la récupération du USer, la liste des contacts n'est pas récupérée
     // meilleures performances
-    @OneToMany(fetch = FetchType.LAZY)
+    //@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+
+    /*@OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "connection", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_contact_id"))
+            inverseJoinColumns = @JoinColumn(name = "user_contact_id"))*/
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "connection",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "user_id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "user_contact_id", referencedColumnName = "user_id"))
     private List<User> contactsList = new ArrayList<>();
 
     public User() {
@@ -153,5 +163,13 @@ public class User {
 
     public void setContactsList(List<User> contactsList) {
         this.contactsList = contactsList;
+    }
+
+    public void addUserContact(User contact) {
+        contactsList.add(contact);
+    }
+
+    public void removeUserContact(User contactToRemove) {
+        contactsList.remove(contactToRemove);
     }
 }
