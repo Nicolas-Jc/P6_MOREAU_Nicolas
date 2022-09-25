@@ -46,8 +46,8 @@ public class ContactController {
 
     // Ajout d'un contact à la liste
     @PostMapping("/contact")
-    public String addContactToList(Model model, @RequestParam(value = "email") String email, User user) {
-        User userConnected = userService.getUserByEmail(user.getEmail());
+    public String addContactToList(Model model, @RequestParam(value = "email") String email, Principal user) {
+        User userConnected = userService.getUserByEmail(user.getName());
         User contactToAdd = userService.getUserByEmail(email);
         if (contactToAdd == null) {
             logger.info("Error, user not found");
@@ -56,14 +56,14 @@ public class ContactController {
         userService.addContact(userConnected, contactToAdd);
         model.addAttribute("addContactSuccess",
                 contactToAdd.getLastname() + " " + contactToAdd.getFirstname() + " have been added to your friends list");
-        logger.info("Friend added to you friends list");
+        logger.info("Friend added to you contatcs list");
         return "redirect:/contacts";
     }
 
     // OK - Chargement et affichage liste des contacts
     @GetMapping("/contact")
-    public String loadContactsList(Model model, User user) {
-        String userEmail = user.getEmail();
+    public String loadContactsList(Model model, Principal user) {
+        String userEmail = user.getName();
         User userConnected2 = userService.getUserByEmail(userEmail);
         List<User> contactsList = userConnected2.getContactsList();
         model.addAttribute("contactsList", contactsList);

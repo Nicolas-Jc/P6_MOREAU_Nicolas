@@ -17,34 +17,33 @@ public class BankAccountService {
     private static Logger logger = LogManager.getLogger("BankAccountService");
 
     // METHODES A PREVOIR
-    // addBankAccount
     // updateBankAccount
 
 
-    public BankAccount addBankAccount(BankAccount bankAccount) {
+    public void addBankAccount(BankAccount bankAccount) {
 
-        User verifUserToAddBank = bankAccount.getUser();
+        User userToAddBank = bankAccount.getUser();
 
         // Recherche compte bancaire existant ? sur ce User
-        BankAccount userToAddBankAccount = verifUserToAddBank.getBankAccount();
+        //BankAccount userToAddBankAccount = userToAddBank.getBankAccount();
 
         // Pas de compte bancaire encore créé pour ce User .
-        if (userToAddBankAccount == null) {
-            BankAccount newBankAccount = new BankAccount();
-            newBankAccount.setBankName(bankAccount.getBankName());
-            newBankAccount.setIban(bankAccount.getIban());
-            newBankAccount.setBic(bankAccount.getBic());
-            newBankAccount.setUser(bankAccount.getUser());
+        //if (userToAddBankAccount == null) {
+        //BankAccount newBankAccount = new BankAccount();
+        // newBankAccount.setBankName(bankAccount.getBankName());
+        //newBankAccount.setIban(bankAccount.getIban());
+        //newBankAccount.setBic(bankAccount.getBic());
+        //newBankAccount.setUser(bankAccount.getUser());
 
-            // Enregistrement des informations compte bancaire sur le User
-            verifUserToAddBank.setBankAccount(newBankAccount);
-            logger.info("Bank account added for user in DDB");
-            // Enregistrement + commit en BDD du CpteBancaire
-            bankAccountRepository.saveAndFlush(newBankAccount);
-            return newBankAccount;
-        }
+        // Enregistrement des informations compte bancaire sur le User
+        userToAddBank.setBankAccount(bankAccount);
+        logger.info("Bank account added for user in DDB");
+        // Enregistrement + commit en BDD du CpteBancaire
+        bankAccountRepository.saveAndFlush(bankAccount);
+        //return newBankAccount;
+        //}
         logger.info("One BankAccount already exists - Not Create");
-        return userToAddBankAccount;
+        //return userToAddBankAccount;
     }
 
     public BankAccount updateBankAccount(Integer bankAccountId, BankAccount accountToUpdate) {
@@ -64,7 +63,7 @@ public class BankAccountService {
     }
 
     public BankAccount getBankAccountById(Integer bankId) {
-        BankAccount baToFind = bankAccountRepository.getReferenceById(bankId);
+        BankAccount baToFind = bankAccountRepository.getById(bankId);
         logger.info("Bank account exists");
         return baToFind;
     }

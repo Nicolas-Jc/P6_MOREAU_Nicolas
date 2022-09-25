@@ -5,6 +5,7 @@ import com.openclassrooms.paymybuddy.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,6 +14,8 @@ public class UserService {
     private static Logger logger = LogManager.getLogger("UserService");
     @Autowired
     private UserRepository userRepository;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     public Iterable<User> getUsers() {
         return userRepository.findAll();
@@ -26,7 +29,7 @@ public class UserService {
             newUser.setLastname(user.getLastname());
             newUser.setFirstname(user.getFirstname());
             newUser.setEmail(user.getEmail());
-            newUser.setPassword(user.getPassword());
+            newUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             newUser.setBalance(0.00f);
 
             // Enregistrement + commit en BDD
@@ -44,11 +47,11 @@ public class UserService {
     // updateBalance
 
     public User getUserByEmail(String email) {
-        return userRepository.findUserByEmail(email);
+        return userRepository.findByEmail(email);
     }
 
     public User updateUser(String userEmail, String lastName, String firstName, String password) {
-        User userToUpdate = userRepository.findUserByEmail(userEmail);
+        User userToUpdate = userRepository.findByEmail(userEmail);
         // User existant. Seules les informations Lastname, firstname, password
         // peuvent être mises à jour
         if (userToUpdate.getEmail().equals(userEmail)) {
@@ -79,7 +82,7 @@ public class UserService {
     }*/
 
     public User updateBalance(String userEmail, Float amount) {
-        User userToUpdateBalance = userRepository.findUserByEmail(userEmail);
+        User userToUpdateBalance = userRepository.findByEmail(userEmail);
         // User existant.
         if (userToUpdateBalance.getEmail().equals(userEmail)) {
             logger.info("userToUpdateBalance : " + userToUpdateBalance);
@@ -90,6 +93,15 @@ public class UserService {
         }
         logger.info("User Balance updated and saved");
         return userToUpdateBalance;
+    }
+
+    public String validateUser(User user) {
+        String message = "Not Found";
+        User userToFind = getUserByEmail(user.getEmail());
+        if (userToFind != null) {
+            message = "Email address already used!";
+        }
+        return message;
     }
 
 }

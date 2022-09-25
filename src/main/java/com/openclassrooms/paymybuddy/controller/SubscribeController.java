@@ -12,50 +12,45 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class SubscribeController {
 
+    private static Logger logger = LogManager.getLogger("SubscribeController");
+
     @Autowired
     UserService userService;
 
-    @ModelAttribute("user")
-    public User user() {
-        return new User();
+    // Constructeur
+
+    public SubscribeController(UserService userService) {
+        this.userService = userService;
     }
 
-    private static Logger logger = LogManager.getLogger("SubscribeController");
 
-    /*@GetMapping("/subscribe")
-    public String createUserForm() {
-        logger.info("GetMapping subscribe");
-        return "subscribe";
-    }
-
-    @PostMapping("/addUser")
-    public ModelAndView createNewUser(@ModelAttribute User user) {
-
-        userService.addUser(user);
-        return new ModelAndView("redirect:/subscribe");
-    }*/
-
-
-    // Fourniture des données à la vue
+    // Get subscribe page:
     @GetMapping(value = "/subscribe")
-    public String subscribe(Model model) {
+    public String subscribeView(Model model) {
         model.addAttribute("user", new User());
         return "subscribe";
     }
 
-
+    // - create a new user
     @PostMapping(value = "/subscribe")
-    public String subscribeForm(@Validated User user, Model model) {
-
-        // A prévoir - rajout test pre-existence e-mail
+    public String subscribe(@Validated User user, BindingResult result, RedirectAttributes redirAttrs) {
+        String err = userService.validateUser(user);
+        if (!"Not Found".equals(err)) {
+            ObjectError error = new ObjectError("globalError", err);
+            result.addError(error);
+        }
+        if (result.hasErrors()) {
+            redirAttrs.addFlashAttribute("error", err);
+            logger.info("Data error, no subscribe");
+            return "redirect:/subscribe";
+        }
+        redirAttrs.addFlashAttribute("success", "Success!");
         logger.info("New user to save: {}", user);
         userService.addUser(user);
         return "redirect:/login";

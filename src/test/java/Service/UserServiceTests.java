@@ -43,12 +43,12 @@ public class UserServiceTests {
     @Test
     void GetUserByEmailTest() {
         // GIVEN
-        when(userRepository.findUserByEmail(userTestExistDB.getEmail())).thenReturn(userTestExistDB);
+        when(userRepository.findByEmail(userTestExistDB.getEmail())).thenReturn(userTestExistDB);
         // WHEN
         User userTest = userService.getUserByEmail(userTestExistDB.getEmail());
         // THEN
         assertEquals(userTestExistDB, userTest);
-        verify(userRepository, Mockito.times(1)).findUserByEmail(userTestExistDB.getEmail());
+        verify(userRepository, Mockito.times(1)).findByEmail(userTestExistDB.getEmail());
     }
 
     @Test
@@ -80,7 +80,7 @@ public class UserServiceTests {
     @Test
     void UpdateUserTest() {
         // GIVEN
-        when(userRepository.findUserByEmail(userTestExistDB.getEmail())).thenReturn(userTestExistDB);
+        when(userRepository.findByEmail(userTestExistDB.getEmail())).thenReturn(userTestExistDB);
         // WHEN
         User userExistsToUpdate = userService.updateUser(
                 userTestExistDB.getEmail(),
@@ -89,7 +89,7 @@ public class UserServiceTests {
                 userTestExistDB.getPassword());
         // THEN
         assertEquals(userTestExistDB, userExistsToUpdate);
-        verify(userRepository, Mockito.times(1)).findUserByEmail(userTestExistDB.getEmail());
+        verify(userRepository, Mockito.times(1)).findByEmail(userTestExistDB.getEmail());
     }
 
     /*@Test

@@ -41,14 +41,16 @@ public class HomeController {
     }*/
 
     @GetMapping({"/", "/home"})
-    public String home(Model model, User user) {
-        User connectedUser = userService.getUserByEmail(user.getEmail());
+    public String home(Model model, Principal principal) {
+        User connectedUser = userService.getUserByEmail(principal.getName());
         BankAccount accountToFind = connectedUser.getBankAccount();
+        // Pas de compte bancaire enregistré
         if (accountToFind == null) {
             model.addAttribute("user", connectedUser);
             logger.info("No bank account recorded");
             return "home";
         }
+        // Existence compte bancaire
         logger.info("Loading User Information");
         // Chargement données utilisateur
         model.addAttribute("user", connectedUser);
@@ -70,24 +72,25 @@ public class HomeController {
     }*/
 
     @PostMapping("/addBankAccount")
-    public ModelAndView addbank(@ModelAttribute BankAccount bankAccount, User user) {
+    //public ModelAndView addbank(@ModelAttribute BankAccount bankAccount, Principal principal, RedirectAttributes redirAttrs) {
+    public ModelAndView addbank(String bankname, String iban, String bic, Principal principal, RedirectAttributes redirAttrs) {
 
         // Recherche compte bancaire pre-existant
-        User userBank = userService.getUserByEmail(user.getEmail());
+        User userBank = userService.getUserByEmail(principal.getName());
         BankAccount bankAccountToFind = userBank.getBankAccount();
 
-        // Pas de compte bancaire => Création
+        // Pas de compte bancaire => CREATION
         if (bankAccountToFind == null) {
-            BankAccount BankAccount = new BankAccount(bankAccount.getBankName(), bankAccount.getIban(), bankAccount.getBic(), userBank);
+            BankAccount BankAccount = new BankAccount(bankname, iban, bic, userBank);
             bankAccountService.addBankAccount(BankAccount);
             logger.info("New bankAccount saved");
             //redirAttrs.addFlashAttribute("bankaccountAdded", successString);
             return new ModelAndView("redirect:/home");
         }
-        // compte bancaire existant => Mise à jour
-        bankAccountToFind.setBankName(bankAccount.getBankName());
-        bankAccountToFind.setIban(bankAccount.getIban());
-        bankAccountToFind.setBic(bankAccount.getBic());
+        // compte bancaire existant => UPDATE
+        bankAccountToFind.setBankName(bankname);
+        bankAccountToFind.setIban(iban);
+        bankAccountToFind.setBic(bic);
         bankAccountService.updateBankAccount(userBank.getBankAccount().getBankAccountId(), bankAccountToFind);
         //redirAttrs.addFlashAttribute("bankaccountUpdate", "Update!");
         logger.info("BankAccount updated & saved");
