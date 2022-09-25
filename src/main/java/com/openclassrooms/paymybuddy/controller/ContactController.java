@@ -55,8 +55,8 @@ public class ContactController {
         }
         userService.addContact(userConnected, contactToAdd);
         model.addAttribute("addContactSuccess",
-                contactToAdd.getLastname() + " " + contactToAdd.getFirstname() + " have been added to your friends list");
-        logger.info("Friend added to you contatcs list");
+                contactToAdd.getLastname() + " " + contactToAdd.getFirstname() + " have been added to your contacts list");
+        logger.info("Contact added to you contacts list");
         return "redirect:/contacts";
     }
 
