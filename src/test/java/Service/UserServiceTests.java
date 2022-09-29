@@ -92,22 +92,4 @@ public class UserServiceTests {
         verify(userRepository, Mockito.times(1)).findByEmail(userTestExistDB.getEmail());
     }
 
-    /*@Test
-    public void newUserCreationSavedInDDBTest() {
-        // GIVEN
-        User user = new User("NomTest1","PrenomTest1","mailtest1@gmail.com", "12345", 0.00f,contactsListTest);
-
-        when(userRepository.save(user)).thenReturn(user);
-        // WHEN
-        User result = userService.addUser(user);
-        // THEN
-        assertThat(result).isNotNull();
-        assertThat(result.getLastname()).isEqualTo("NomTest1");
-        assertThat(result.getFirstname()).isEqualTo("PrenomTest1");
-        assertThat(result.getEmail()).isEqualTo("mailtest1@gmail.com");
-        assertThat(result.getPassword()).isEqualTo("12345");
-        assertThat(result.getBalance()).isEqualTo(0.00f);
-        assertThat(result.getContactsList()).isEmpty();
-    }*/
-
 }

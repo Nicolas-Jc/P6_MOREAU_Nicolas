@@ -29,8 +29,7 @@ public class SubscribeController {
         this.userService = userService;
     }
 
-
-    // Get subscribe page:
+    // Chargement de la page:
     @GetMapping(value = "/subscribe")
     public String subscribeView(Model model) {
         model.addAttribute("user", new User());

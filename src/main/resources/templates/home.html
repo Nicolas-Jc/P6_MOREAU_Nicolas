@@ -30,34 +30,67 @@
         </div>
     </div>
 </nav>
+<!-- container-fluid : pour occuper 100% largeur écran -->
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-lg-auto text-center">
-            <!-- Add User BankAccount -->
-            <h3> ADD BANK ACCOUNT </h3>
-            <form th:action="@{/addBankAccount}" method="post" th:object="${bankAccount}">
-                <div class="input-group input-group-sm mb-3">
-                    <span class="input-group-text col-4 justify-content-center"> Bank Name </span>
-                    <input type="text" class="form-control" name="bankname" th:value="${bankAccount?.bankName}"
-                           autofocus="autofocus">
+            <section>
+                <h3> BALANCE </h3>
+                <div class="input-group-text col-6 justify-content-center"
+                     th:text="${user.balance}"></div>
+                <div class="input-group-text col-6 justify-content-center"> €</div>
+                <br>
+                <div class="d-inline-flex flexbd-highlight mb-3">
+                    <form th:action="@{/deposit}" method="post" th:object="${user}" style="margin-left: 15px;">
+                        <div class="input-group input-group-sm mb-3">
+                            <input type="text" class="form-control" name="balance" placeholder="00.00"
+                                   style="text-align:center" required>
+                        </div>
+                        <!-- money button -->
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <input class="form-control btn btn-success btn-sm" type="submit" name="deposite"
+                                   value="Deposite">
+                        </div>
+                    </form>
+                    <form th:action="@{/withdraw}" method="post" th:object="${user}" style="margin-right: 15px;">
+                        <div class="input-group input-group-sm mb-3">
+                            <input type="text" class="form-control" name="balance" placeholder="00.00"
+                                   style="text-align:center" required>
+                        </div>
+                        <!-- money button -->
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <input class="form-control btn btn-success btn-sm" type="submit" name="withdraw"
+                                   value="Withdraw">
+                        </div>
+                    </form>
                 </div>
-                <div class="input-group input-group-sm mb-3">
-                    <span class="input-group-text col-4 justify-content-center"> Iban </span>
-                    <input type="text" class="form-control" name="iban" th:value="${bankAccount?.iban}"
-                           autofocus="autofocus">
-                </div>
-                <div class="input-group input-group-sm mb-3">
-                    <span class="input-group-text col-4 justify-content-center"> Bic </span>
-                    <input type="text" class="form-control" name="bic" th:value="${bankAccount?.bic}"
-                           autofocus="autofocus">
-                </div>
+            </section>
+            <section>
+                <h3> BANK ACCOUNT </h3>
+                <form th:action="@{/addBankAccount}" method="post" th:object="${bankAccount}">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text col-4 justify-content-center"> Bank Name </span>
+                        <input type="text" class="form-control" name="bankname" th:value="${bankAccount?.bankName}"
+                               autofocus="autofocus">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text col-4 justify-content-center"> Iban </span>
+                        <input type="text" class="form-control" name="iban" th:value="${bankAccount?.iban}"
+                               autofocus="autofocus">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text col-4 justify-content-center"> Bic </span>
+                        <input type="text" class="form-control" name="bic" th:value="${bankAccount?.bic}"
+                               autofocus="autofocus">
+                    </div>
 
-                <!-- Add account button -->
-                <div class="d-grid gap-2 col-4 mx-auto">
-                    <input class="form-control btn btn-success btn-sm" type="submit" name="bank-submit"
-                           value="Save account">
-                </div>
-            </form>
+                    <!-- Add account button -->
+                    <div class="d-grid gap-2 col-4 mx-auto">
+                        <input class="form-control btn btn-success btn-sm" type="submit" name="bank-submit"
+                               value="Save account">
+                    </div>
+                </form>
+            </section>
         </div>
     </div>
 </div>

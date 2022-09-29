@@ -33,19 +33,20 @@ public class ContactController {
     // Recherche contact par mail
     @GetMapping("/findContact")
     public String findContact(Model model, @RequestParam(value = "email") String email,
-                              RedirectAttributes redirectAtt) {
+                              RedirectAttributes redirectAtt, Principal user) {
         User contactToFind = userService.getUserByEmail(email);
         if (contactToFind == null) {
-            logger.info("Email address no exists: {}", email);
+            logger.info("Email not exists: {}", email);
             return "redirect:/contacts";
         }
+        // Activation Div "User found"
         redirectAtt.addFlashAttribute("searchContact", contactToFind);
         logger.info("Email address found: {}", email);
         return "redirect:/contacts";
     }
 
     // Ajout d'un contact à la liste
-    @PostMapping("/contact")
+    @PostMapping("/contacts")
     public String addContactToList(Model model, @RequestParam(value = "email") String email, Principal user) {
         User userConnected = userService.getUserByEmail(user.getName());
         User contactToAdd = userService.getUserByEmail(email);
@@ -60,8 +61,8 @@ public class ContactController {
         return "redirect:/contacts";
     }
 
-    // OK - Chargement et affichage liste des contacts
-    @GetMapping("/contact")
+    // - Chargement et affichage liste des contacts
+    @GetMapping("/contacts")
     public String loadContactsList(Model model, Principal user) {
         String userEmail = user.getName();
         User userConnected2 = userService.getUserByEmail(userEmail);

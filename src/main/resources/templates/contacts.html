@@ -23,7 +23,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbar">
             <div class="navbar-nav">
-                <a class="nav-link" href="/contacts"> Contacts </a>
+                <a class="nav-link active" aria-current="page" href="/contacts"> Contacts </a>
                 <a class="nav-link" href="/transactions"> Transactions </a>
                 <a class="nav-link" th:href="@{/logout}"> logout</a>
             </div>
@@ -33,52 +33,59 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-lg-auto text-center">
-            <!-- Contact à rechercher -->
-            <p> Search contacts </p>
-            <form th:action="@{/findContact}" method="get">
-                <div class="input-group flex-nowrap">
-                    <span class="input-group-text" id="addon-wrapping"> Enter email: </span>
-                    <input name="email" type="email" class="form-control" id="email" placeholder="Email address">
-                    <button type="submit" class="btn btn-success"> Search</button>
-                </div>
-            </form>
-            <br>
-            <!-- Contact trouvé - confirmation et affichage dans la vue -->
-            <div th:if="${searchContact}" class="searchAccountResult">
-                <p> User found : </p>
-                <p th:text="|${searchContact.lastname} ${searchContact.firstname} |"></p>
-                <br>
-
-                <!-- Ajout du contact à la liste -->
-                <p> Add this contact to your list.</p>
-                <form th:action="@{/contact}" method="post">
+            <section>
+                <!-- Contact à rechercher -->
+                <p> Search contacts </p>
+                <form th:action="@{/findContact}" method="get">
                     <div class="input-group flex-nowrap">
-                        <input th:value="${searchContact.email}" name="email" type="email" class="form-control"
-                               placeholder="Enter email">
-                        <button type="submit" class="btn btn-success"> Add to contacts</button>
+                        <span class="input-group-text" id="addon-wrapping"> Enter email: </span>
+                        <input name="email" type="email" class="form-control" id="email" placeholder="Email address">
+                        <button type="submit" class="btn btn-success"> Search</button>
                     </div>
                 </form>
-            </div>
+                <br>
+            </section>
+            <section>
+                <!-- Contact trouvé - confirmation et affichage dans la vue-->
+                <div th:if="${searchContact}">
+                    <p> User found : </p>
+                    <p th:text="|${searchContact.lastname} ${searchContact.firstname} |"></p>
+                    <br>
+
+                    <p> Add contact to your list.</p>
+                    <form th:action="@{/contacts}" method="post">
+                        <div class="input-group flex-nowrap">
+                            <input th:value="${searchContact.email}" name="email" type="email" class="form-control"
+                                   placeholder="Enter email">
+                            <button type="submit" class="btn btn-success"> Add to contacts</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+
             <!-- LISTE des contacts rattachés au User connecté -->
-            <h4> CONTACTS LIST </h4>
-            <table class="table table-striped table-hover">
-                <thead class="table-secondary">
-                <tr>
-                    <th scope="col"> Lastname</th>
-                    <th scope="col"> Firstname</th>
-                    <th scope="col"> Email</th>
-                    <th scope="col"> Balance</th>
-                </tr>
-                </thead>
-                <tbody th:each="user : ${contactsList}">
-                <tr>
-                    <td th:text="${user.lastname}+"></td>
-                    <td th:text="${user.firstname}"></td>
-                    <td th:text="${user.email}"></td>
-                    <td th:text="${user.balance}"></td>
-                </tr>
-                </tbody>
-            </table>
+            <section>
+                <h4> CONTACTS LIST </h4>
+                <table class="table table-striped table-hover">
+                    <thead class="table-secondary">
+                    <tr>
+                        <th scope="col"> Lastname</th>
+                        <th scope="col"> Firstname</th>
+                        <th scope="col"> Email</th>
+                        <th scope="col"> Balance</th>
+                    </tr>
+                    </thead>
+                    <tbody th:each="user : ${contactsList}">
+                    <tr>
+                        <td th:text="${user.lastname}"></td>
+                        <td th:text="${user.firstname}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.balance}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
         </div>
     </div>
 </div>

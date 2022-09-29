@@ -54,8 +54,11 @@ public class HomeController {
         logger.info("Loading User Information");
         // Chargement données utilisateur
         model.addAttribute("user", connectedUser);
-        // Chargement données bancaires
+        // Chargement données bancaires du User connecté
         model.addAttribute("bankAccount", accountToFind);
+        // Chargement Valeur Balance
+        Float balance = connectedUser.getBalance();
+        model.addAttribute("balance", balance);
         return "home";
     }
 
