@@ -29,10 +29,7 @@ public class BankAccountService {
         logger.info("Bank account added for user in DDB");
         // Enregistrement + commit en BDD du CpteBancaire
         bankAccountRepository.saveAndFlush(bankAccount);
-        //return newBankAccount;
-        //}
         logger.info("One BankAccount already exists - Not Create");
-        //return userToAddBankAccount;
     }
 
     public BankAccount updateBankAccount(Integer bankAccountId, BankAccount accountToUpdate) {

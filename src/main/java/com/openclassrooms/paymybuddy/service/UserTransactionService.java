@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class UserTransactionService {
@@ -34,6 +35,16 @@ public class UserTransactionService {
         return userTransactionRepository.findAll();
     }
 
+    public List<UserTransaction> getTransacsBySender(User sender) {
+        logger.info("Transactions founded for: {}", sender);
+        return userTransactionRepository.getUserTransactionsBySender(sender);
+    }
+
+    public List<UserTransaction> getTransacsByReceiver(User receiver) {
+        logger.info("Transactions founded for: {}", receiver);
+        return userTransactionRepository.getUserTransactionsByReceiver(receiver);
+    }
+
     public UserTransaction sendMoney(User sender, String emailReceiver, String description, Float amount) {
         User receiver = userService.getUserByEmail(emailReceiver);
         // Montant des frais
@@ -45,7 +56,7 @@ public class UserTransactionService {
         Float receiverBalance = receiver.getBalance();
 
         if (senderBalance < receiveAmount) {
-            logger.info("Balance not enough: {}, sending Amount: {}", senderBalance, amount);
+            logger.info("Balance not enough");
             // Arrêt à prévoir
             return null;
         }
@@ -55,7 +66,7 @@ public class UserTransactionService {
 
         UserTransaction transaction = new UserTransaction(sender, receiver, dateTime, receiveAmount, description, FEE_RATE);
         userTransactionRepository.save(transaction);
-        logger.info("Transaction has been saved " + transaction);
+        logger.info("Transaction has been saved: {}", transaction);
         return transaction;
     }
 }

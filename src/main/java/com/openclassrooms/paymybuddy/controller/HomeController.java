@@ -4,6 +4,7 @@ package com.openclassrooms.paymybuddy.controller;
 import com.openclassrooms.paymybuddy.model.BankAccount;
 import com.openclassrooms.paymybuddy.model.User;
 import com.openclassrooms.paymybuddy.service.BankAccountService;
+import com.openclassrooms.paymybuddy.service.BankTransactionService;
 import com.openclassrooms.paymybuddy.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,17 +29,15 @@ public class HomeController {
     BankAccountService bankAccountService;
 
     @Autowired
+    BankTransactionService bankTransactionService;
+
+    @Autowired
     UserService userService;
 
     public HomeController(UserService userService, BankAccountService bankAccountService) {
         this.userService = userService;
         this.bankAccountService = bankAccountService;
     }
-
-    /*@ModelAttribute("bankAccount")
-    public BankAccount bankAccount() {
-        return new BankAccount();
-    }*/
 
     @GetMapping({"/", "/home"})
     public String home(Model model, Principal principal) {
@@ -62,21 +61,8 @@ public class HomeController {
         return "home";
     }
 
-    /*@GetMapping("/home")
-    public String home() {
-        logger.info("GetMapping home");
-        return "home";
-    }*/
-
-    /*@PostMapping("/addBankAccount")
-    public ModelAndView createNewBankAccount(@ModelAttribute BankAccount bankAccount) {
-        bankAccountService.addBankAccount(bankAccount);
-        return new ModelAndView("redirect:/home");
-    }*/
-
     @PostMapping("/addBankAccount")
-    //public ModelAndView addbank(@ModelAttribute BankAccount bankAccount, Principal principal, RedirectAttributes redirAttrs) {
-    public ModelAndView addbank(String bankname, String iban, String bic, Principal principal, RedirectAttributes redirAttrs) {
+    public ModelAndView addbank(String bankname, String iban, String bic, Principal principal) {
 
         // Recherche compte bancaire pre-existant
         User userBank = userService.getUserByEmail(principal.getName());
@@ -95,8 +81,39 @@ public class HomeController {
         bankAccountToFind.setIban(iban);
         bankAccountToFind.setBic(bic);
         bankAccountService.updateBankAccount(userBank.getBankAccount().getBankAccountId(), bankAccountToFind);
-        //redirAttrs.addFlashAttribute("bankaccountUpdate", "Update!");
         logger.info("BankAccount updated & saved");
         return new ModelAndView("redirect:/home");
     }
+
+    @PostMapping("/deposit")
+    public ModelAndView addmoney(Float balance, Principal principal, RedirectAttributes redirAttrs) {
+        String userEmail = principal.getName();
+        User userBalance = userService.getUserByEmail(userEmail);
+
+        if (balance <= 0) {
+            logger.info("Negative amount not allowed");
+            return new ModelAndView("redirect:/home");
+        }
+        bankTransactionService.depositMoneyToBalance(userBalance, balance);
+        redirAttrs.addFlashAttribute("balance", userBalance);
+        logger.info("Money added to balance");
+        return new ModelAndView("redirect:/home");
+    }
+
+    @PostMapping("/withdraw")
+    public ModelAndView withdrawmoney(Float balance, Principal principal, RedirectAttributes redirAttrs) {
+
+        String userEmail = principal.getName();
+        User userBalance = userService.getUserByEmail(userEmail);
+
+        if (balance <= 0) {
+            logger.info("Negative amount not allowed");
+            return new ModelAndView("redirect:/home");
+        }
+        bankTransactionService.withdrawMoneyFromBalance(userBalance, balance);
+        redirAttrs.addFlashAttribute("balance", userBalance);
+        logger.info("Money withdraw from balance");
+        return new ModelAndView("redirect:/home");
+    }
+
 }

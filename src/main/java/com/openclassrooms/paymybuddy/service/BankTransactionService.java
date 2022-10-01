@@ -1,6 +1,7 @@
 package com.openclassrooms.paymybuddy.service;
 
 import com.openclassrooms.paymybuddy.model.BankTransaction;
+import com.openclassrooms.paymybuddy.model.BankingMovementType;
 import com.openclassrooms.paymybuddy.model.User;
 import com.openclassrooms.paymybuddy.repository.BankTransactionRepository;
 import com.openclassrooms.paymybuddy.repository.UserRepository;
@@ -24,12 +25,6 @@ public class BankTransactionService {
 
     private final LocalDateTime dateTime = LocalDateTime.now();
 
-
-    // METHODES A PREVOIR
-    // creditAccount
-    // debitAccount
-    // Appel updateBalance dans UserService
-
     public BankTransaction depositMoneyToBalance(User user, Float deposit) {
         // ETAPE 1 : Création et enregistrement Transaction
         BankTransaction bankTransaction = new BankTransaction();
@@ -37,7 +32,7 @@ public class BankTransactionService {
         bankTransaction.setTransactionDate(dateTime);
         bankTransaction.setAmount(deposit);
         bankTransaction.setOwner(user);
-        bankTransaction.setMovementType("DEPOSIT");
+        bankTransaction.setMovementType(String.valueOf(BankingMovementType.DEPOSIT));
         bankTransaction.setBankAccount(user.getBankAccount());
         bankTransactionRepository.saveAndFlush(bankTransaction);
         logger.info("bank transaction DEPOSIT saved in DBB");
@@ -58,7 +53,7 @@ public class BankTransactionService {
         bankTransaction.setTransactionDate(dateTime);
         bankTransaction.setAmount(withdraw);
         bankTransaction.setOwner(user);
-        bankTransaction.setMovementType("WITHDRAW");
+        bankTransaction.setMovementType(String.valueOf(BankingMovementType.WITHDRAW));
         bankTransaction.setBankAccount(user.getBankAccount());
         bankTransactionRepository.saveAndFlush(bankTransaction);
         logger.info("bank transaction WITHDRAW saved in DBB");
