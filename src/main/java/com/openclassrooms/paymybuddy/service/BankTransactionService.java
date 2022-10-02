@@ -23,12 +23,12 @@ public class BankTransactionService {
     @Autowired
     private BankTransactionRepository bankTransactionRepository;
 
-    private final LocalDateTime dateTime = LocalDateTime.now();
 
     public BankTransaction depositMoneyToBalance(User user, Float deposit) {
         // ETAPE 1 : Création et enregistrement Transaction
         BankTransaction bankTransaction = new BankTransaction();
 
+        LocalDateTime dateTime = LocalDateTime.now();
         bankTransaction.setTransactionDate(dateTime);
         bankTransaction.setAmount(deposit);
         bankTransaction.setOwner(user);
@@ -50,6 +50,7 @@ public class BankTransactionService {
         // ETAPE 1 : Création et enregistrement Transaction
         BankTransaction bankTransaction = new BankTransaction();
 
+        LocalDateTime dateTime = LocalDateTime.now();
         bankTransaction.setTransactionDate(dateTime);
         bankTransaction.setAmount(withdraw);
         bankTransaction.setOwner(user);

@@ -36,11 +36,13 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-auto text-center">
-            <section>
-                <h3> BALANCE </h3>
+            <section class="bg-light border border-1 px-lg-2">
+                <h3> Balance </h3>
                 <div class="row list-inline-item">
+                    <!--<div class="input-group-text col-10 justify-content-center"
+                         th:text="${user.balance}">-->
                     <div class="input-group-text col-10 justify-content-center"
-                         th:text="${user.balance}">
+                         th:text="${#numbers.formatDecimal(user.balance,1,'WHITESPACE',2,'POINT')}">
                     </div>
                     <div class="input-group-text col-2 justify-content-center"> €</div>
                 </div>
@@ -59,7 +61,7 @@
                     </form>
                     <form th:action="@{/withdraw}" method="post" th:object="${user}" style="margin-right: 15px;">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" name="balance" placeholder="00.00"
+                            <input type="text" class="form-control" name="balanceWithdraw" placeholder="00.00"
                                    style="text-align:center" required>
                         </div>
                         <!-- money button -->
@@ -70,8 +72,8 @@
                     </form>
                 </div>
             </section>
-            <section>
-                <h3> BANK ACCOUNT </h3>
+            <section class="mt-5 bg-light border border-1 px-lg-2">
+                <h3> Bank Account </h3>
                 <form th:action="@{/addBankAccount}" method="post" th:object="${bankAccount}">
                     <div class="input-group input-group mb-3">
                         <span class="input-group-text col-4 justify-content-center"> Bank Name </span>
@@ -90,7 +92,7 @@
                     </div>
 
                     <!-- Add account button -->
-                    <div class="d-grid gap-2 col-4 mx-auto">
+                    <div class="d-grid gap-2 col-4 mx-auto mb-3">
                         <input class="form-control btn btn-success btn" type="submit" name="bank-submit"
                                value="Save account">
                     </div>

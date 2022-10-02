@@ -21,8 +21,6 @@ public class UserTransactionService {
     private UserTransactionRepository userTransactionRepository;
     private static Logger logger = LogManager.getLogger("UserTransactionService");
 
-    private final LocalDateTime dateTime = LocalDateTime.now();
-
     private static final float FEE_RATE = 0.005f;
 
 
@@ -63,6 +61,8 @@ public class UserTransactionService {
 
         sender.setBalance(senderBalance - amount);
         receiver.setBalance(receiverBalance + receiveAmount);
+
+        LocalDateTime dateTime = LocalDateTime.now();
 
         UserTransaction transaction = new UserTransaction(sender, receiver, dateTime, receiveAmount, description, FEE_RATE);
         userTransactionRepository.save(transaction);

@@ -25,7 +25,7 @@ public class LoginController {
     @GetMapping(value = "/error")
     public String accessDenied(Model model, Principal principal) {
         String message = "Sorry " + principal.getName()
-                + "<br> You do not have permission to access this page!";
+                + "You not have permission access this page !";
         model.addAttribute("message", message);
         logger.info("Error with user access");
         return "error";

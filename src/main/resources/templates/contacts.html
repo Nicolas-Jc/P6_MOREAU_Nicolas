@@ -33,10 +33,10 @@
 </nav>
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-auto text-center">
-            <section>
+        <div class="col-4 text-center">
+            <section class="bg-light border border-1 px-lg-2">
                 <!-- Contact à rechercher -->
-                <h4> SEARCH CONTACTS </h4>
+                <h4> Search Contacts </h4>
                 <form th:action="@{/findContact}" method="get">
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text" id="addon-wrapping"> Enter email: </span>
@@ -46,7 +46,7 @@
                 </form>
                 <br>
             </section>
-            <section>
+            <section class="bg-light border border-1 px-lg-2">
                 <!-- Contact trouvé - confirmation et affichage dans la vue-->
                 <div th:if="${searchContact}">
                     <p> User found : </p>
@@ -55,7 +55,7 @@
 
                     <p> Add contact to your list.</p>
                     <form th:action="@{/contacts}" method="post">
-                        <div class="input-group flex-nowrap">
+                        <div class="input-group flex-nowrap mb-3">
                             <input th:value="${searchContact.email}" name="email" type="email" class="form-control"
                                    placeholder="Enter email">
                             <button type="submit" class="btn btn-success"> Add to contacts</button>
@@ -65,8 +65,8 @@
             </section>
 
             <!-- LISTE des contacts rattachés au User connecté -->
-            <section class="mt-5">
-                <h4> CONTACTS LIST </h4>
+            <section class="mt-5 bg-light border border-1 px-lg-2">
+                <h4> Contacts List </h4>
                 <table class="table table-striped table-hover">
                     <thead class="table-secondary">
                     <tr>
@@ -81,7 +81,7 @@
                         <td th:text="${user.lastname}"></td>
                         <td th:text="${user.firstname}"></td>
                         <td th:text="${user.email}"></td>
-                        <td th:text="${user.balance}"></td>
+                        <td th:text="${#numbers.formatDecimal(user.balance,1,'WHITESPACE',2,'POINT')}"></td>
                     </tr>
                     </tbody>
                 </table>

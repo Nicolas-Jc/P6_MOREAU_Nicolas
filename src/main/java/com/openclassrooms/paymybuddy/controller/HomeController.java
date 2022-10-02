@@ -101,16 +101,17 @@ public class HomeController {
     }
 
     @PostMapping("/withdraw")
-    public ModelAndView withdrawmoney(Float balance, Principal principal, RedirectAttributes redirAttrs) {
+    public ModelAndView withdrawmoney(Float balanceWithdraw, Principal principal, RedirectAttributes redirAttrs) {
 
         String userEmail = principal.getName();
         User userBalance = userService.getUserByEmail(userEmail);
+        Float balance = userBalance.getBalance();
 
-        if (balance <= 0) {
+        if (balanceWithdraw - balance > 0) {
             logger.info("Negative amount not allowed");
             return new ModelAndView("redirect:/home");
         }
-        bankTransactionService.withdrawMoneyFromBalance(userBalance, balance);
+        bankTransactionService.withdrawMoneyFromBalance(userBalance, balanceWithdraw);
         redirAttrs.addFlashAttribute("balance", userBalance);
         logger.info("Money withdraw from balance");
         return new ModelAndView("redirect:/home");

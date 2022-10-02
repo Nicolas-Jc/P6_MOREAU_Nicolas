@@ -33,16 +33,16 @@
 </nav>
 <div class="container-fluid ">
     <div class="row justify-content-center">
-        <div class="col-auto text-center">
+        <div class="col-3 text-center bg-light border border-1">
             <h3> Create your account </h3>
             <form th:action="@{/subscribe}" method="post" th:object="${user}">
                 <div class="mb-3">
-                    <label for="lastname" class="form-label"> LastName </label>
+                    <label for="lastname" class="form-label"> Last Name </label>
                     <input type="text" class="form-control" id="lastname" th:field="*{lastname}" autofocus="autofocus"
                            required>
                 </div>
                 <div class="mb-3">
-                    <label for="firstname" class="form-label"> FirstName </label>
+                    <label for="firstname" class="form-label"> First Name </label>
                     <input type="text" class="form-control" id="firstname" th:field="*{firstname}" autofocus="autofocus"
                            required>
                 </div>
@@ -57,7 +57,7 @@
                            required>
                 </div>
                 <div class="mb-3">
-                    <input class="form-control btn btn-success" type="submit" name="subscribe-submit"
+                    <input class="form-control btn btn-success mt-3 mb-3" type="submit" name="subscribe-submit"
                            id="subscribe-submit"
                            value="Create account">
                 </div>

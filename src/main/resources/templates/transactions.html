@@ -33,12 +33,13 @@
 </nav>
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-auto text-center">
-            <section>
-                <h3>SEND MONEY</h3>
+        <div class="col-4 text-center ">
+            <section class="bg-light border border-1 px-lg-2">
+                <h3>Send Money</h3>
                 <form th:action="@{/sendmoney}" method="post" th:object="${transaction}">
                     <div class="input-group input-group-sm mb-3">
-                        <span class="input-group-text col-3 justify-content-center" th:text="${user.balance}"></span>
+                        <span class="input-group-text col-3 justify-content-center"
+                              th:text="${#numbers.formatDecimal(user.balance,1,'WHITESPACE',2,'POINT')}"></span>
                         <span class="input-group-text"> € </span>
                         <input type="text" class="form-control" name="amount" placeholder="1.00" required>
                     </div>
@@ -47,7 +48,7 @@
                         <select class="form-select form-select-sm" name="emailReceiver" required>
                             <option selected th:value="email"> Select contact to send money...</option>
                             <option th:each="user: ${contact}"
-                                    th:text="${user.firstname}+' '+${user.lastname}+': '+${user.balance}+€"
+                                    th:text="${user.firstname}+' '+${user.lastname}+': '+${#numbers.formatDecimal(user.balance,1,'WHITESPACE',2,'POINT')}+€"
                                     th:value="${user.email}"></option>
                         </select>
                     </div>
@@ -57,14 +58,14 @@
                                   required></textarea>
                     </div>
                     <!-- Send money button -->
-                    <div class="d-grid gap-2 col-3 mx-auto">
+                    <div class="d-grid gap-2 col-3 mx-auto mb-3">
                         <input class="form-control btn btn-success btn-sm" type="submit" name="sendMoney"
                                value="Send money">
                     </div>
                 </form>
             </section>
-            <section class="mt-5">
-                <h3> MY PAYMENTS </h3>
+            <section class="mt-5 bg-light border border-1 px-lg-2">
+                <h3> My Payments </h3>
                 <table class="table table-striped">
                     <thead class="table-light">
                     <tr>
@@ -81,8 +82,8 @@
                             style="font-size:0.9em"></td>
                         <td th:text="${#temporals.format(transactionsSent.transactionDate, 'dd-MM-yyyy HH:mm')}"
                             style="font-size:0.8em;vertical-align: middle;"></td>
-                        >
-                        <td th:text="${transactionsSent.amount}" style="font-size:0.9em"></td>
+                        <td th:text="${#numbers.formatDecimal(transactionsSent.amount,1,'WHITESPACE',2,'POINT')}"
+                            style="font-size:0.9em"></td>
                         <td th:text="${transactionsSent.fee}" style="font-size:0.9em;color:grey;"></td>
                         <td th:text="${transactionsSent.description}"
                             style="font-size:0.9em;vertical-align: middle;"></td>
@@ -90,8 +91,8 @@
                     </tbody>
                 </table>
             </section>
-            <section class="mt-5">
-                <h3> MY REFUNDS </h3>
+            <section class="mt-5 bg-light border border-1 px-lg-2">
+                <h3> My Refunds </h3>
                 <table class="table table-striped">
                     <thead class="table-light">
                     <tr>
@@ -108,7 +109,8 @@
                             style="font-size:0.9em"></td>
                         <td th:text="${#temporals.format(transactionsReceiver.transactionDate, 'dd-MM-yyyy HH:mm')}"
                             style="font-size:0.8em;vertical-align: middle;"></td>
-                        <td th:text="${transactionsReceiver.amount}" style="font-size:0.9em"></td>
+                        <td th:text="${#numbers.formatDecimal(transactionsReceiver.amount,1,'WHITESPACE',2,'POINT')}"
+                            style="font-size:0.9em"></td>
                         <td th:text="${transactionsReceiver.fee}" style="font-size:0.9em;color:grey;"></td>
                         <td th:text="${transactionsReceiver.description}"
                             style="font-size:0.9em;vertical-align: middle;"></td>

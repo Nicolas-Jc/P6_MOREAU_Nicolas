@@ -50,8 +50,8 @@ public class ContactController {
     public String addContactToList(Model model, @RequestParam(value = "email") String email, Principal user) {
         User userConnected = userService.getUserByEmail(user.getName());
         User contactToAdd = userService.getUserByEmail(email);
-        if (contactToAdd == null) {
-            logger.info("Error, user not found");
+        if (contactToAdd == null || userConnected.getContactsList().contains(contactToAdd)) {
+            logger.info("Error, user not found OR user already in Contacts List");
             return "redirect:/contacts";
         }
         userService.addContact(userConnected, contactToAdd);
