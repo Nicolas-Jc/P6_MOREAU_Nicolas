@@ -39,19 +39,21 @@ public class SubscribeController {
     // - create a new user
     @PostMapping(value = "/subscribe")
     public String subscribe(@Validated User user, BindingResult result, RedirectAttributes redirAttrs) {
-        String err = userService.validateUser(user);
-        if (!"Not Found".equals(err)) {
-            ObjectError error = new ObjectError("globalError", err);
+        Boolean verifNewUser = userService.verifNewUser(user);
+        if (Boolean.TRUE.equals(verifNewUser)) {
+            ObjectError error = new ObjectError("globalError", "Email is already used!");
             result.addError(error);
+
         }
         if (result.hasErrors()) {
-            redirAttrs.addFlashAttribute("error", err);
-            logger.info("Data error, no subscribe");
+            redirAttrs.addFlashAttribute("error", "Email is already used!");
+            logger.error("Error, no subscribe");
             return "redirect:/subscribe";
         }
+        // Succes création nouveau compte. Renvoi vers page de connexion
         redirAttrs.addFlashAttribute("success", "Success!");
-        logger.info("New user to save: {}", user);
         userService.addUser(user);
+        logger.info("New user saved : {}", user);
         return "redirect:/login";
     }
 }

@@ -37,14 +37,9 @@ public class UserService {
             logger.info("User added DDB");
             return newUser;
         }
-        logger.info("User exists Not Create");
+        logger.error("User exists Not Create");
         return verifUserToAdd;
     }
-
-    // AUTRES METHODES A PREVOIR
-    // addContacts
-    // deleteContacts
-    // updateBalance
 
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email);
@@ -61,7 +56,7 @@ public class UserService {
             userToUpdate.setPassword(password);
             userRepository.saveAndFlush(userToUpdate);
         } else {
-            logger.info("User not exists");
+            logger.error("User not exists");
         }
         logger.info("User updated and saved");
         return userToUpdate;
@@ -74,13 +69,6 @@ public class UserService {
         return contactToAdd;
     }
 
-    /*public User removeContact(User user, User contactToRemove) {
-        user.removeUserContact(contactToRemove);
-        //userRepository.saveAndFlush(user);
-        logger.info("User removed from connection");
-        return contactToRemove;
-    }*/
-
     public User updateBalance(String userEmail, Float amount) {
         User userToUpdateBalance = userRepository.findByEmail(userEmail);
         // User existant.
@@ -89,19 +77,15 @@ public class UserService {
             userToUpdateBalance.setBalance(amount);
             userRepository.saveAndFlush(userToUpdateBalance);
         } else {
-            logger.info("User not exists");
+            logger.error("User not exists");
         }
         logger.info("User Balance updated and saved");
         return userToUpdateBalance;
     }
 
-    public String validateUser(User user) {
-        String message = "Not Found";
+    public Boolean verifNewUser(User user) {
         User userToFind = getUserByEmail(user.getEmail());
-        if (userToFind != null) {
-            message = "Email address already used!";
-        }
-        return message;
+        return userToFind != null;
     }
 
 }

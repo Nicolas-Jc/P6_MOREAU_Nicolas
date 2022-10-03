@@ -24,11 +24,6 @@ public class UserTransactionService {
     private static final float FEE_RATE = 0.005f;
 
 
-    // METHODES A PREVOIR
-    // sendMoney
-    // Appel updateBalance dans UserService
-    // getTransactionsBySender / Receiver
-
     public Iterable<UserTransaction> getUserTransactions() {
         return userTransactionRepository.findAll();
     }
@@ -54,7 +49,7 @@ public class UserTransactionService {
         Float receiverBalance = receiver.getBalance();
 
         if (senderBalance < receiveAmount) {
-            logger.info("Balance not enough");
+            logger.warn("Balance not enough");
             // Arrêt à prévoir
             return null;
         }

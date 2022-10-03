@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.Objects;
 
 
 @Controller
@@ -62,7 +63,7 @@ public class HomeController {
     }
 
     @PostMapping("/addBankAccount")
-    public ModelAndView addbank(String bankname, String iban, String bic, Principal principal) {
+    public ModelAndView addbank(String bankname, String iban, String bic, Principal principal, RedirectAttributes redirAttrs) {
 
         // Recherche compte bancaire pre-existant
         User userBank = userService.getUserByEmail(principal.getName());
@@ -70,48 +71,52 @@ public class HomeController {
 
         // Pas de compte bancaire => CREATION
         if (bankAccountToFind == null) {
-            BankAccount BankAccount = new BankAccount(bankname, iban, bic, userBank);
-            bankAccountService.addBankAccount(BankAccount);
+            BankAccount newBankAccount = new BankAccount(bankname, iban, bic, userBank);
+            bankAccountService.addBankAccount(newBankAccount);
             logger.info("New bankAccount saved");
-            //redirAttrs.addFlashAttribute("bankaccountAdded", successString);
+            redirAttrs.addFlashAttribute("bankAccountAdded", "OK");
             return new ModelAndView("redirect:/home");
         }
+       
         // compte bancaire existant => UPDATE
         bankAccountToFind.setBankName(bankname);
         bankAccountToFind.setIban(iban);
         bankAccountToFind.setBic(bic);
         bankAccountService.updateBankAccount(userBank.getBankAccount().getBankAccountId(), bankAccountToFind);
-        logger.info("BankAccount updated & saved");
+        logger.info("BankAccount updated");
+        redirAttrs.addFlashAttribute("bankAccountUpdated", "OK");
         return new ModelAndView("redirect:/home");
     }
 
     @PostMapping("/deposit")
-    public ModelAndView addmoney(Float balance, Principal principal, RedirectAttributes redirAttrs) {
+    public ModelAndView addmoney(Float depositAmount, Principal principal, RedirectAttributes redirAttrs) {
         String userEmail = principal.getName();
         User userBalance = userService.getUserByEmail(userEmail);
 
-        if (balance <= 0) {
-            logger.info("Negative amount not allowed");
+        if (depositAmount < 0) {
+            redirAttrs.addFlashAttribute("errorAmount", "Negative amount not allowed !");
+            logger.warn("Negative amount not allowed");
             return new ModelAndView("redirect:/home");
         }
-        bankTransactionService.depositMoneyToBalance(userBalance, balance);
+        bankTransactionService.depositMoneyToBalance(userBalance, depositAmount);
         redirAttrs.addFlashAttribute("balance", userBalance);
-        logger.info("Money added to balance");
+        logger.info("Money deposited to balance");
         return new ModelAndView("redirect:/home");
     }
 
     @PostMapping("/withdraw")
-    public ModelAndView withdrawmoney(Float balanceWithdraw, Principal principal, RedirectAttributes redirAttrs) {
+    public ModelAndView withdrawmoney(Float withdrawAmount, Principal principal, RedirectAttributes redirAttrs) {
 
         String userEmail = principal.getName();
         User userBalance = userService.getUserByEmail(userEmail);
         Float balance = userBalance.getBalance();
 
-        if (balanceWithdraw - balance > 0) {
-            logger.info("Negative amount not allowed");
+        if (Float.compare(withdrawAmount, balance) > 0) {
+            redirAttrs.addFlashAttribute("errorAmount", "Withdrawal greater than available balance !");
+            logger.warn("Withdrawal greater than available balance");
             return new ModelAndView("redirect:/home");
         }
-        bankTransactionService.withdrawMoneyFromBalance(userBalance, balanceWithdraw);
+        bankTransactionService.withdrawMoneyFromBalance(userBalance, withdrawAmount);
         redirAttrs.addFlashAttribute("balance", userBalance);
         logger.info("Money withdraw from balance");
         return new ModelAndView("redirect:/home");

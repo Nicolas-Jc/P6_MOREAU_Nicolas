@@ -16,9 +16,6 @@ public class BankAccountService {
 
     private static Logger logger = LogManager.getLogger("BankAccountService");
 
-    // METHODES A PREVOIR
-    // updateBankAccount
-
 
     public void addBankAccount(BankAccount bankAccount) {
 
@@ -29,7 +26,7 @@ public class BankAccountService {
         logger.info("Bank account added for user in DDB");
         // Enregistrement + commit en BDD du CpteBancaire
         bankAccountRepository.saveAndFlush(bankAccount);
-        logger.info("One BankAccount already exists - Not Create");
+        logger.warn("One BankAccount already exists - Not Create");
     }
 
     public BankAccount updateBankAccount(Integer bankAccountId, BankAccount accountToUpdate) {
@@ -42,7 +39,7 @@ public class BankAccountService {
 
             bankAccountRepository.saveAndFlush(bankAccountToFind);
         } else {
-            logger.info("Bankaccount not exists");
+            logger.error("Bankaccount not exists");
         }
         logger.info("Bankaccount updated and saved");
         return bankAccountToFind;

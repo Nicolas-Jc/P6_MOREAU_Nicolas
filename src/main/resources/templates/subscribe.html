@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
->
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -24,9 +24,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbar">
             <div class="navbar-nav">
-                <a class="nav-link" href="/contacts"> Contacts </a>
-                <a class="nav-link" href="/transactions"> Transactions </a>
-                <a class="nav-link" th:href="@{/logout}"> logout</a>
+                <!--   sec:authorize="isAuthenticated()"
+               => This content is only shown to authenticated users-->
+                <a class="nav-link" href="/contacts" sec:authorize="isAuthenticated()"> Contacts </a>
+                <a class="nav-link" href="/transactions" sec:authorize="isAuthenticated()"> Transactions </a>
+                <a class="nav-link" th:href="@{/logout}" sec:authorize="isAuthenticated()"> logout</a>
             </div>
         </div>
     </div>
@@ -34,7 +36,12 @@
 <div class="container-fluid ">
     <div class="row justify-content-center">
         <div class="col-3 text-center bg-light border border-1">
-            <h3> Create your account </h3>
+            <!-- error message -->
+            <div th:if="${error}" th:class="${alert}">
+                <div class="alert alert-danger" th:text="${error}"></div>
+            </div>
+            <span> Already registered ? <a th:href="@{/login}"> Login to your account here </a></span>
+            <h3 class="mt-3"> Create your account </h3>
             <form th:action="@{/subscribe}" method="post" th:object="${user}">
                 <div class="mb-3">
                     <label for="lastname" class="form-label"> Last Name </label>

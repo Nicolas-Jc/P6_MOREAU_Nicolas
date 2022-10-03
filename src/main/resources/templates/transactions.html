@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
->
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -24,9 +24,13 @@
         </button>
         <div class="collapse navbar-collapse" id="navbar">
             <div class="navbar-nav">
-                <a class="nav-link" href="/contacts"> Contacts </a>
-                <a class="nav-link active" aria-current="page" href="/transactions"> Transactions </a>
-                <a class="nav-link" th:href="@{/logout}"> logout</a>
+                <!--   sec:authorize="isAuthenticated()"
+               => This content is only shown to authenticated users-->
+                <a class="nav-link" href="/contacts" sec:authorize="isAuthenticated()"> Contacts </a>
+                <a class="nav-link active bg-success text-light" aria-current="page" href="/transactions"
+                   sec:authorize="isAuthenticated()">
+                    Transactions </a>
+                <a class="nav-link" th:href="@{/logout}" sec:authorize="isAuthenticated()"> logout</a>
             </div>
         </div>
     </div>
@@ -46,9 +50,12 @@
                     <div class="input-group input-group-sm mb-3">
                         <span class="input-group-text col-3 justify-content-center"> Contacts</span>
                         <select class="form-select form-select-sm" name="emailReceiver" required>
-                            <option selected th:value="email"> Select contact to send money...</option>
-                            <option th:each="user: ${contact}"
+                            <option selected th:value="email"> Select contact to send money</option>
+                            <!--<option th:each="user: ${contact}"
                                     th:text="${user.firstname}+' '+${user.lastname}+': '+${#numbers.formatDecimal(user.balance,1,'WHITESPACE',2,'POINT')}+€"
+                                    th:value="${user.email}"></option>-->
+                            <option th:each="user: ${contact}"
+                                    th:text="${user.firstname}+' '+${user.lastname}+' - '+${user.email}"
                                     th:value="${user.email}"></option>
                         </select>
                     </div>

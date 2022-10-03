@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
->
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -17,7 +17,6 @@
 <!--Navigation bar Bootstrap 5.1 Header -->
 <nav class="navbar navbar-expand navbar-light">
     <div class="container-fluid">
-        <!--<a class="navbar-brand" href="#" th:href="@{/}">PAYMYBUDDY </a>-->
         <a class="navbar-brand" href="#" th:href="@{/}"><i class="bi bi-cash-coin" style="font-size: 200%;"></i></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
                 aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,9 +24,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbar">
             <div class="navbar-nav">
-                <a class="nav-link" href="/contacts"> Contacts </a>
-                <a class="nav-link" href="/transactions"> Transactions </a>
-                <a class="nav-link" th:href="@{/logout}"> logout</a>
+                <!--   sec:authorize="isAuthenticated()"
+               => This content is only shown to authenticated users-->
+                <a class="nav-link" href="/contacts" sec:authorize="isAuthenticated()"> Contacts </a>
+                <a class="nav-link" href="/transactions" sec:authorize="isAuthenticated()"> Transactions </a>
+                <a class="nav-link" th:href="@{/logout}" sec:authorize="isAuthenticated()"> logout</a>
             </div>
         </div>
     </div>
@@ -47,10 +48,13 @@
                     <div class="input-group-text col-2 justify-content-center"> €</div>
                 </div>
                 <br>
+                <div th:if="${errorAmount}" th:class="${alert}">
+                    <div class="alert alert-danger" th:text="${errorAmount}"></div>
+                </div>
                 <div class="d-inline-flex flexbd-highlight mb-3">
                     <form th:action="@{/deposit}" method="post" th:object="${user}" style="margin-left: 15px;">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" name="balance" placeholder="00.00"
+                            <input type="text" class="form-control" name="depositAmount" placeholder="00.00"
                                    style="text-align:center" required>
                         </div>
                         <!-- money button -->
@@ -61,7 +65,7 @@
                     </form>
                     <form th:action="@{/withdraw}" method="post" th:object="${user}" style="margin-right: 15px;">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" name="balanceWithdraw" placeholder="00.00"
+                            <input type="text" class="form-control" name="withdrawAmount" placeholder="00.00"
                                    style="text-align:center" required>
                         </div>
                         <!-- money button -->
@@ -74,6 +78,12 @@
             </section>
             <section class="mt-5 bg-light border border-1 px-lg-2">
                 <h3> Bank Account </h3>
+                <div th:if="${bankAccountUpdated}" th:class="${alert}">
+                    <div class="alert alert-success"> Bank Account updated</div>
+                </div>
+                <div th:if="${bankAccountAdded}" th:class="${alert}">
+                    <div class="alert alert-success"> Bank Account created</div>
+                </div>
                 <form th:action="@{/addBankAccount}" method="post" th:object="${bankAccount}">
                     <div class="input-group input-group mb-3">
                         <span class="input-group-text col-4 justify-content-center"> Bank Name </span>
@@ -98,6 +108,7 @@
                     </div>
                 </form>
             </section>
+            <p class="fw-light"> Connected User: <span sec:authentication="principal.username"> </span></p>
         </div>
     </div>
 </div>

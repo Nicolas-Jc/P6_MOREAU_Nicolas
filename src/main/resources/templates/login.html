@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
->
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -24,9 +24,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbar">
             <div class="navbar-nav">
-                <a class="nav-link" href="/contacts"> Contacts </a>
-                <a class="nav-link" href="/transactions"> Transactions </a>
-                <a class="nav-link" th:href="@{/logout}"> logout</a>
+                <!--   sec:authorize="isAuthenticated()"
+                => This content is only shown to authenticated users-->
+                <a class="nav-link" href="/contacts" sec:authorize="isAuthenticated()"> Contacts </a>
+                <a class="nav-link" href="/transactions" sec:authorize="isAuthenticated()"> Transactions </a>
+                <a class="nav-link" th:href="@{/logout}" sec:authorize="isAuthenticated()"> logout</a>
             </div>
         </div>
     </div>
@@ -35,21 +37,31 @@
     <div class="row justify-content-center">
         <div class="col-3 text-center bg-light border border-1">
             <h3 class="bg-success rounded-pill text-light mb-3 mt-4 p-2">Pay My Buddy</h3>
+            <!-- Message -->
+            <div th:if="${success}" th:class="${alert}">
+                <div class="alert alert-success"><strong> Successful subscribe.</strong>
+                    <p>Please login to your account !
+                </div>
+            </div>
             <form th:action="@{/login}" method="post">
-                <!-- Email field -->
+                <!-- Unauthorised access -->
+                <div th:if="${param.error}">
+                    <div class="alert alert-danger" role="alert"> Email or password error ! Try again.</div>
+                </div>
+                <!-- Email -->
                 <div class="mb-3">
                     <label for="username" class="form-label"> User email </label>
                     <input type="email" class="form-control" id="username" name="username"
                            placeholder="Enter your email" autofocus="autofocus" aria-describedby="emailHelp">
                 </div>
-                <!-- Password field -->
+                <!-- Password -->
                 <div class="mb-3">
                     <label for="password" class="form-label"> Password </label>
                     <input type="password" class="form-control" id="password" name="password"
                            placeholder="Enter your password">
                 </div>
                 <br>
-                <!-- submit button -->
+                <!-- login button -->
                 <div class="d-grid gap-2 col-6 mx-auto">
                     <button type="submit" class="btn btn-primary mb-3" th:text="Login">Login</button>
                 </div>
