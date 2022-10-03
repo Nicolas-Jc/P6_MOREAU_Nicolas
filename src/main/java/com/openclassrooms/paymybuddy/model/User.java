@@ -1,16 +1,14 @@
 package com.openclassrooms.paymybuddy.model;
 
-import com.sun.istack.NotNull;
-import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.transaction.annotation.Transactional;
+//import com.sun.istack.NotNull;
 
-import javax.annotation.Generated;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @DynamicUpdate

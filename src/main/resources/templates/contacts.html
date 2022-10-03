@@ -78,21 +78,19 @@
             <!-- LISTE des contacts rattachés au User connecté -->
             <section class="mt-5 bg-light border border-1 px-lg-2">
                 <h4> Contacts List </h4>
-                <table class="table table-striped table-hover">
-                    <thead class="table-secondary">
+                <table class="table table-striped">
+                    <thead class="table-light">
                     <tr>
                         <th scope="col"> Last Name</th>
                         <th scope="col"> First Name</th>
                         <th scope="col"> Email</th>
-                        <!--<th scope="col"> Balance</th>-->
                     </tr>
                     </thead>
-                    <tbody th:each="user : ${contactsList}">
+                    <tbody th:each="user : ${contactsList}" th:remove="tag">
                     <tr>
                         <td th:text="${user.lastname}"></td>
                         <td th:text="${user.firstname}"></td>
                         <td th:text="${user.email}" style="color:grey"></td>
-                        <!--<td th:text="${#numbers.formatDecimal(user.balance,1,'WHITESPACE',2,'POINT')}"></td>-->
                     </tr>
                     </tbody>
                 </table>

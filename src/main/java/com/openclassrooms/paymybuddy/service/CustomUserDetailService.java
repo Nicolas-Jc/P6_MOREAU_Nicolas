@@ -13,9 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
-/**
- * Class Access User Detail Service
- */
+
 @Service
 public class CustomUserDetailService implements UserDetailsService {
     private static Logger logger = LogManager.getLogger("TransactionControllerLog");

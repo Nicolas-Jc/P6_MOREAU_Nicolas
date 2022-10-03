@@ -39,6 +39,13 @@
     <div class="row justify-content-center">
         <div class="col-4 text-center ">
             <section class="bg-light border border-1 px-lg-2">
+                <!-- Messages -->
+                <div th:if="${transactionSuccess}" th:class="${alert}">
+                    <div class="alert alert-success"> The transaction has been recorded</div>
+                </div>
+                <div th:if="${errorAmount}" th:class="${alert}">
+                    <div class="alert alert-danger" th:text="${errorAmount}"></div>
+                </div>
                 <h3>Send Money</h3>
                 <form th:action="@{/sendmoney}" method="post" th:object="${transaction}">
                     <div class="input-group input-group-sm mb-3">
@@ -51,9 +58,6 @@
                         <span class="input-group-text col-3 justify-content-center"> Contacts</span>
                         <select class="form-select form-select-sm" name="emailReceiver" required>
                             <option selected th:value="email"> Select contact to send money</option>
-                            <!--<option th:each="user: ${contact}"
-                                    th:text="${user.firstname}+' '+${user.lastname}+': '+${#numbers.formatDecimal(user.balance,1,'WHITESPACE',2,'POINT')}+€"
-                                    th:value="${user.email}"></option>-->
                             <option th:each="user: ${contact}"
                                     th:text="${user.firstname}+' '+${user.lastname}+' - '+${user.email}"
                                     th:value="${user.email}"></option>
@@ -86,14 +90,15 @@
                     <tbody th:each="transactionsSent: ${transactionsSent}" th:remove="tag">
                     <tr>
                         <td th:text="${transactionsSent.receiver.firstname}+' '+${transactionsSent.receiver.lastname}"
-                            style="font-size:0.9em"></td>
+                            style="font-size:0.9em;vertical-align: middle"></td>
                         <td th:text="${#temporals.format(transactionsSent.transactionDate, 'dd-MM-yyyy HH:mm')}"
                             style="font-size:0.8em;vertical-align: middle;"></td>
                         <td th:text="${#numbers.formatDecimal(transactionsSent.amount,1,'WHITESPACE',2,'POINT')}"
-                            style="font-size:0.9em"></td>
-                        <td th:text="${transactionsSent.fee}" style="font-size:0.9em;color:grey;"></td>
+                            style="font-size:0.9em;vertical-align: middle"></td>
+                        <td th:text="${transactionsSent.fee}"
+                            style="font-size:0.9em;vertical-align: middle;color:grey;"></td>
                         <td th:text="${transactionsSent.description}"
-                            style="font-size:0.9em;vertical-align: middle;"></td>
+                            style="font-size:0.7em;vertical-align: middle;"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -113,14 +118,15 @@
                     <tbody th:each="transactionsReceiver: ${transactionsReceiver}" th:remove="tag">
                     <tr>
                         <td th:text="${transactionsReceiver.sender.firstname}+' '+${transactionsReceiver.sender.lastname}"
-                            style="font-size:0.9em"></td>
+                            style="font-size:0.9em;vertical-align: middle"></td>
                         <td th:text="${#temporals.format(transactionsReceiver.transactionDate, 'dd-MM-yyyy HH:mm')}"
-                            style="font-size:0.8em;vertical-align: middle;"></td>
+                            style="font-size:0.8em;vertical-align: middle"></td>
                         <td th:text="${#numbers.formatDecimal(transactionsReceiver.amount,1,'WHITESPACE',2,'POINT')}"
-                            style="font-size:0.9em"></td>
-                        <td th:text="${transactionsReceiver.fee}" style="font-size:0.9em;color:grey;"></td>
+                            style="font-size:0.9em;vertical-align: middle"></td>
+                        <td th:text="${transactionsReceiver.fee}"
+                            style="font-size:0.9em;vertical-align: middle;color:grey;"></td>
                         <td th:text="${transactionsReceiver.description}"
-                            style="font-size:0.9em;vertical-align: middle;"></td>
+                            style="font-size:0.7em;vertical-align: middle;"></td>
                     </tr>
                     </tbody>
                 </table>

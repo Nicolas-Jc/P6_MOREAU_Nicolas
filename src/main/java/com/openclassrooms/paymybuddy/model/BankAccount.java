@@ -3,7 +3,6 @@ package com.openclassrooms.paymybuddy.model;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 @DynamicUpdate

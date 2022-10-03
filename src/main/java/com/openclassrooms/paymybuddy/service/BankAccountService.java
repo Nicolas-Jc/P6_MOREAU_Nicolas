@@ -16,7 +16,6 @@ public class BankAccountService {
 
     private static Logger logger = LogManager.getLogger("BankAccountService");
 
-
     public void addBankAccount(BankAccount bankAccount) {
 
         User userToAddBank = bankAccount.getUser();

@@ -12,13 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
-import java.util.Objects;
 
 
 @Controller
@@ -77,7 +75,7 @@ public class HomeController {
             redirAttrs.addFlashAttribute("bankAccountAdded", "OK");
             return new ModelAndView("redirect:/home");
         }
-       
+
         // compte bancaire existant => UPDATE
         bankAccountToFind.setBankName(bankname);
         bankAccountToFind.setIban(iban);
@@ -121,5 +119,4 @@ public class HomeController {
         logger.info("Money withdraw from balance");
         return new ModelAndView("redirect:/home");
     }
-
 }

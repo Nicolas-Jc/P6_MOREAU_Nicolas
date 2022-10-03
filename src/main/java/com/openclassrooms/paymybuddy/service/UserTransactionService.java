@@ -48,12 +48,13 @@ public class UserTransactionService {
         Float senderBalance = sender.getBalance();
         Float receiverBalance = receiver.getBalance();
 
-        if (senderBalance < receiveAmount) {
+        /*if (senderBalance < receiveAmount) {
             logger.warn("Balance not enough");
             // Arrêt à prévoir
             return null;
-        }
+        }*/
 
+        // Mise à jour des soldes de l'expéditeur et destinataire
         sender.setBalance(senderBalance - amount);
         receiver.setBalance(receiverBalance + receiveAmount);
 

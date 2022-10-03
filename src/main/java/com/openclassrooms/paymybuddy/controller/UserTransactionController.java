@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
@@ -44,21 +45,24 @@ public class UserTransactionController {
         model.addAttribute("contact", contactsList);
         model.addAttribute("transactionsSent", transactionsSent);
         model.addAttribute("transactionsReceiver", transactionsReceived);
-        logger.info("Data uploaded for user: {}", userConnected);
+        logger.info("Transactions uploaded for user: {}", userConnected);
         return "transactions";
     }
 
     // Formulaire d'envoi d'argent
     @PostMapping("/sendmoney")
-    public String sendmoney(String emailReceiver, String description, Float amount, Principal principal) {
+    public String sendmoney(String emailReceiver, String description, Float amount,
+                            Principal principal, RedirectAttributes redirAttrs) {
         String userEmail = principal.getName();
         User userConnected = userService.getUserByEmail(userEmail);
 
         if (amount < 0) {
+            redirAttrs.addFlashAttribute("errorAmount", "Negative amount not possible");
             return "redirect:/transactions";
         }
 
         userTransactionService.sendMoney(userConnected, emailReceiver, description, amount);
+        redirAttrs.addFlashAttribute("transactionSuccess", "OK !");
         logger.info("User transaction sent to: {}", emailReceiver);
         return "redirect:/transactions";
     }
