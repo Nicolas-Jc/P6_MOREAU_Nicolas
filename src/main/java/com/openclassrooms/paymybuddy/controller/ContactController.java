@@ -33,31 +33,34 @@ public class ContactController {
     // Recherche contact par mail
     @GetMapping("/findContact")
     public String findContact(Model model, @RequestParam(value = "email") String email,
-                              RedirectAttributes redirectAtt, Principal user) {
+                              RedirectAttributes redirAttrs, Principal user) {
         User contactToFind = userService.getUserByEmail(email);
         if (contactToFind == null) {
-            logger.info("Email not exists: {}", email);
+            redirAttrs.addFlashAttribute("searchError", "Email not found");
+            logger.warn("Email not found: {}", email);
             return "redirect:/contacts";
         }
         // Activation Div "User found"
-        redirectAtt.addFlashAttribute("searchContact", contactToFind);
+        redirAttrs.addFlashAttribute("searchContact", contactToFind);
         logger.info("Email address found: {}", email);
         return "redirect:/contacts";
     }
 
     // Ajout d'un contact à la liste
     @PostMapping("/contacts")
-    public String addContactToList(Model model, @RequestParam(value = "email") String email, Principal user) {
+    public String addContactToList(Model model, @RequestParam(value = "email") String email,
+                                   Principal user, RedirectAttributes redirAttrs) {
         User userConnected = userService.getUserByEmail(user.getName());
         User contactToAdd = userService.getUserByEmail(email);
         if (contactToAdd == null || userConnected.getContactsList().contains(contactToAdd)) {
-            logger.info("Error, user not found OR user already in Contacts List");
+            logger.warn("Email Error, user not found OR user already in Contacts List");
+            redirAttrs.addFlashAttribute("addError", "Email Error, user not found OR user already in Contacts List");
             return "redirect:/contacts";
         }
         userService.addContact(userConnected, contactToAdd);
+        logger.info("Contact added to list");
         model.addAttribute("addContactSuccess",
-                contactToAdd.getLastname() + " " + contactToAdd.getFirstname() + " have been added to your contacts list");
-        logger.info("Contact added to you contacts list");
+                "Contact have been added to your list");
         return "redirect:/contacts";
     }
 
