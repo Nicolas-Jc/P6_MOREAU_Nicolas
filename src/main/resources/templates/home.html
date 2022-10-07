@@ -85,6 +85,9 @@
                 <div th:if="${bankAccountAdded}" th:class="${alert}">
                     <div class="alert alert-success"> Bank Account created</div>
                 </div>
+                <div th:if="${bankAccountNotCompleted}" th:class="${alert}">
+                    <div class="alert alert-danger" th:text="${bankAccountNotCompleted}"></div>
+                </div>
                 <form th:action="@{/addBankAccount}" method="post" th:object="${bankAccount}">
                     <div class="input-group input-group mb-3">
                         <span class="input-group-text col-4 justify-content-center"> Bank Name </span>

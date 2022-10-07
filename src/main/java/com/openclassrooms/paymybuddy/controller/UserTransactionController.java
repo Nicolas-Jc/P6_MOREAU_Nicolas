@@ -34,7 +34,7 @@ public class UserTransactionController {
 
     // Fourniture données à la vue transactions
     @GetMapping("/transactions")
-    public String send(Model model, Principal principal) {
+    public String transactionsLoad(Model model, Principal principal) {
         String userEmail = principal.getName();
         User userConnected = userService.getUserByEmail(userEmail);
         List<User> contactsList = userConnected.getContactsList();

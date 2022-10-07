@@ -38,7 +38,7 @@
 </nav>
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-4 text-center ">
+        <div class="col-6 text-center ">
             <section class="bg-light border border-1 px-lg-2">
                 <!-- Messages -->
                 <div th:if="${transactionSuccess}" th:class="${alert}">
@@ -77,7 +77,7 @@
                 </form>
             </section>
             <section class="mt-5 bg-light border border-1 px-lg-2">
-                <h4> My Payments (
+                <h4> My Payments (Number:
                     <th:block th:text="${#lists.size(transactionsSent)}"></th:block>
                     )
                 </h4>
@@ -86,8 +86,9 @@
                     <tr>
                         <th scope="col"> Receiver</th>
                         <th scope="col"> Date</th>
-                        <th scope="col"> Amount</th>
-                        <th scope="col"> Fee Rate</th>
+                        <th scope="col"> Amount(€)</th>
+                        <th scope="col"> Fee Amount(€)</th>
+                        <th scope="col"> Fee(%)</th>
                         <th scope="col"> Description</th>
                     </tr>
                     </thead>
@@ -99,7 +100,9 @@
                             style="font-size:0.8em;vertical-align: middle;"></td>
                         <td th:text="${#numbers.formatDecimal(transactionsSent.amount,1,'WHITESPACE',2,'POINT')}"
                             style="font-size:0.9em;vertical-align: middle"></td>
-                        <td th:text="${transactionsSent.fee}"
+                        <td th:text="${#numbers.formatDecimal(transactionsSent.fee,1,'WHITESPACE',2,'POINT')}"
+                            style="font-size:0.9em;vertical-align: middle;color:grey;"></td>
+                        <td th:text="${#numbers.formatDecimal(transactionsSent.feeRate,1,'WHITESPACE',1,'POINT')}"
                             style="font-size:0.9em;vertical-align: middle;color:grey;"></td>
                         <td th:text="${transactionsSent.description}"
                             style="font-size:0.7em;vertical-align: middle;"></td>
@@ -108,7 +111,7 @@
                 </table>
             </section>
             <section class="mt-5 bg-light border border-1 px-lg-2">
-                <h4> My Refunds (
+                <h4> My Refunds (Number:
                     <th:block th:text="${#lists.size(transactionsReceiver)}"></th:block>
                     )
                 </h4>
@@ -117,8 +120,9 @@
                     <tr>
                         <th scope="col"> Sender</th>
                         <th scope="col"> Date</th>
-                        <th scope="col"> Amount</th>
-                        <th scope="col"> Fee Rate</th>
+                        <th scope="col"> Amount(€)</th>
+                        <th scope="col"> Fee Amount(€)</th>
+                        <th scope="col"> Fee(%)</th>
                         <th scope="col"> Description</th>
                     </tr>
                     </thead>
@@ -130,7 +134,9 @@
                             style="font-size:0.8em;vertical-align: middle"></td>
                         <td th:text="${#numbers.formatDecimal(transactionsReceiver.amount,1,'WHITESPACE',2,'POINT')}"
                             style="font-size:0.9em;vertical-align: middle"></td>
-                        <td th:text="${transactionsReceiver.fee}"
+                        <td th:text="${#numbers.formatDecimal(transactionsReceiver.fee,1,'WHITESPACE',2,'POINT')}"
+                            style="font-size:0.9em;vertical-align: middle;color:grey;"></td>
+                        <td th:text="${#numbers.formatDecimal(transactionsReceiver.feeRate,1,'WHITESPACE',1,'POINT')}"
                             style="font-size:0.9em;vertical-align: middle;color:grey;"></td>
                         <td th:text="${transactionsReceiver.description}"
                             style="font-size:0.7em;vertical-align: middle;"></td>

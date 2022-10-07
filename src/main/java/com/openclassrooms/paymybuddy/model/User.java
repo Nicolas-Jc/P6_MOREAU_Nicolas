@@ -58,7 +58,8 @@ public class User {
     /*@OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "connection", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "user_contact_id"))*/
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    //@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "connection",
             joinColumns = @JoinColumn(

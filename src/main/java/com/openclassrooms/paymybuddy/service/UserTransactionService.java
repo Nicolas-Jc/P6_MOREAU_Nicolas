@@ -38,7 +38,7 @@ public class UserTransactionService {
         return userTransactionRepository.getUserTransactionsByReceiverOrderByTransactionDateDesc(receiver);
     }
 
-    public UserTransaction sendMoney(User sender, String emailReceiver, String description, Float amount) {
+    public void sendMoney(User sender, String emailReceiver, String description, Float amount) {
         User receiver = userService.getUserByEmail(emailReceiver);
         // Montant des frais
         Float feeAmount = amount * FEE_RATE;
@@ -54,9 +54,8 @@ public class UserTransactionService {
 
         LocalDateTime dateTime = LocalDateTime.now();
 
-        UserTransaction transaction = new UserTransaction(sender, receiver, dateTime, receiveAmount, description, FEE_RATE);
+        UserTransaction transaction = new UserTransaction(sender, receiver, dateTime, receiveAmount, description, feeAmount);
         userTransactionRepository.save(transaction);
         logger.info("Transaction has been saved: {}", transaction);
-        return transaction;
     }
 }
