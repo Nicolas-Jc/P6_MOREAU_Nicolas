@@ -17,16 +17,17 @@
 <!--Navigation bar Bootstrap 5.1 Header -->
 <nav class="navbar navbar-expand navbar-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#" th:href="@{/}"><i class="bi bi-cash-coin" style="font-size: 200%;"></i></a>
+        <a class="navbar-brand bg-success text-light rounded-pill px-3" href="#" th:href="@{/}"> Pay My Buddy </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
                 aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbar">
+        <div class="collapse navbar-collapse justify-content-end" id="navbar">
             <div class="navbar-nav">
                 <!--   sec:authorize="isAuthenticated()"
                 => This content is only shown to authenticated users-->
-                <a class="nav-link" href="/contacts" sec:authorize="isAuthenticated()"> Contacts </a>
+                <a class="nav-link" href="#" th:href="@{/}" sec:authorize="isAuthenticated()"> Home </a>
+                <a class="nav-link" href="/contacts" sec:authorize="isAuthenticated()"> Connections </a>
                 <a class="nav-link" href="/transactions" sec:authorize="isAuthenticated()"> Transactions </a>
                 <a class="nav-link" th:href="@{/logout}" sec:authorize="isAuthenticated()"> logout</a>
             </div>

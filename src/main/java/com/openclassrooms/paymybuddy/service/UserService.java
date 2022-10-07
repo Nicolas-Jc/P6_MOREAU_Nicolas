@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -62,11 +63,11 @@ public class UserService {
         return userToUpdate;
     }
 
-    public User addContact(User user, User contactToAdd) {
+    @Transactional
+    public void addContact(User user, User contactToAdd) {
         user.addUserContact(contactToAdd);
         userRepository.saveAndFlush(user);
         logger.info("User added to connection");
-        return contactToAdd;
     }
 
     public User updateBalance(String userEmail, Float amount) {

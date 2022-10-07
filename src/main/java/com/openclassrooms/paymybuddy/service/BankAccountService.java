@@ -19,16 +19,14 @@ public class BankAccountService {
     public void addBankAccount(BankAccount bankAccount) {
 
         User userToAddBank = bankAccount.getUser();
-
         // Enregistrement des informations compte bancaire sur le User
         userToAddBank.setBankAccount(bankAccount);
         logger.info("Bank account added for user in DDB");
         // Enregistrement + commit en BDD du CpteBancaire
         bankAccountRepository.saveAndFlush(bankAccount);
-        logger.warn("One BankAccount already exists - Not Create");
     }
 
-    public BankAccount updateBankAccount(Integer bankAccountId, BankAccount accountToUpdate) {
+    public void updateBankAccount(Integer bankAccountId, BankAccount accountToUpdate) {
         BankAccount bankAccountToFind = getBankAccountById(bankAccountId);
         // Le compte bancaire existe
         if (bankAccountToFind != null) {
@@ -41,7 +39,6 @@ public class BankAccountService {
             logger.error("Bankaccount not exists");
         }
         logger.info("Bankaccount updated and saved");
-        return bankAccountToFind;
     }
 
     public BankAccount getBankAccountById(Integer bankId) {

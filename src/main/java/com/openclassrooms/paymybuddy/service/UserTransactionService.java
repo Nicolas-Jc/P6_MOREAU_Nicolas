@@ -6,6 +6,7 @@ import com.openclassrooms.paymybuddy.repository.UserTransactionRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -47,12 +48,6 @@ public class UserTransactionService {
 
         Float senderBalance = sender.getBalance();
         Float receiverBalance = receiver.getBalance();
-
-        /*if (senderBalance < receiveAmount) {
-            logger.warn("Balance not enough");
-            // Arrêt à prévoir
-            return null;
-        }*/
 
         // Mise à jour des soldes de l'expéditeur et destinataire
         sender.setBalance(senderBalance - amount);

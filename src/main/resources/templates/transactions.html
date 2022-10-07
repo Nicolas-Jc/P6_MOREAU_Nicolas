@@ -17,16 +17,17 @@
 <!--Navigation bar Bootstrap 5.1 Header -->
 <nav class="navbar navbar-expand navbar-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#" th:href="@{/}"><i class="bi bi-cash-coin" style="font-size: 200%;"></i></a>
+        <a class="navbar-brand bg-success text-light rounded-pill px-3" href="#" th:href="@{/}"> Pay My Buddy </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
                 aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbar">
+        <div class="collapse navbar-collapse justify-content-end" id="navbar">
             <div class="navbar-nav">
                 <!--   sec:authorize="isAuthenticated()"
                => This content is only shown to authenticated users-->
-                <a class="nav-link" href="/contacts" sec:authorize="isAuthenticated()"> Contacts </a>
+                <a class="nav-link" href="#" th:href="@{/}" sec:authorize="isAuthenticated()"> Home </a>
+                <a class="nav-link" href="/contacts" sec:authorize="isAuthenticated()"> Connections </a>
                 <a class="nav-link active bg-success text-light" aria-current="page" href="/transactions"
                    sec:authorize="isAuthenticated()">
                     Transactions </a>
@@ -46,7 +47,7 @@
                 <div th:if="${errorAmount}" th:class="${alert}">
                     <div class="alert alert-danger" th:text="${errorAmount}"></div>
                 </div>
-                <h3>Send Money</h3>
+                <h4>Send Money</h4>
                 <form th:action="@{/sendmoney}" method="post" th:object="${transaction}">
                     <div class="input-group input-group-sm mb-3">
                         <span class="input-group-text col-3 justify-content-center"
@@ -76,7 +77,10 @@
                 </form>
             </section>
             <section class="mt-5 bg-light border border-1 px-lg-2">
-                <h3> My Payments </h3>
+                <h4> My Payments (
+                    <th:block th:text="${#lists.size(transactionsSent)}"></th:block>
+                    )
+                </h4>
                 <table class="table table-striped">
                     <thead class="table-light">
                     <tr>
@@ -104,7 +108,10 @@
                 </table>
             </section>
             <section class="mt-5 bg-light border border-1 px-lg-2">
-                <h3> My Refunds </h3>
+                <h4> My Refunds (
+                    <th:block th:text="${#lists.size(transactionsReceiver)}"></th:block>
+                    )
+                </h4>
                 <table class="table table-striped">
                     <thead class="table-light">
                     <tr>
