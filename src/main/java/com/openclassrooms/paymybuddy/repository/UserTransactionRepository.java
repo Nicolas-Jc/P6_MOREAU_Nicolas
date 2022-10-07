@@ -10,10 +10,11 @@ import java.util.List;
 @Repository
 public interface UserTransactionRepository extends JpaRepository<UserTransaction, Integer> {
 
-    List<UserTransaction> getUserTransactionsBySender(User sender);
+    List<UserTransaction> getUserTransactionsBySenderOrderByTransactionDateDesc(User sender);
 
     /**
      * {@inheritDoc}
      */
-    List<UserTransaction> getUserTransactionsByReceiver(User receiver);
+    List<UserTransaction> getUserTransactionsByReceiverOrderByTransactionDateDesc(User receiver);
+
 }

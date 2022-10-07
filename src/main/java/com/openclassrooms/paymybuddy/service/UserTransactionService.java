@@ -6,7 +6,6 @@ import com.openclassrooms.paymybuddy.repository.UserTransactionRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -31,12 +30,12 @@ public class UserTransactionService {
 
     public List<UserTransaction> getTransacsBySender(User sender) {
         logger.info("Transactions founded for: {}", sender);
-        return userTransactionRepository.getUserTransactionsBySender(sender);
+        return userTransactionRepository.getUserTransactionsBySenderOrderByTransactionDateDesc(sender);
     }
 
     public List<UserTransaction> getTransacsByReceiver(User receiver) {
         logger.info("Transactions founded for: {}", receiver);
-        return userTransactionRepository.getUserTransactionsByReceiver(receiver);
+        return userTransactionRepository.getUserTransactionsByReceiverOrderByTransactionDateDesc(receiver);
     }
 
     public UserTransaction sendMoney(User sender, String emailReceiver, String description, Float amount) {
