@@ -84,12 +84,12 @@
                 <table class="table table-striped">
                     <thead class="table-light">
                     <tr>
-                        <th scope="col"> Receiver</th>
-                        <th scope="col"> Date</th>
-                        <th scope="col"> Amount(€)</th>
-                        <th scope="col"> Fee Amount(€)</th>
-                        <th scope="col"> Fee(%)</th>
-                        <th scope="col"> Description</th>
+                        <th style="width: 20%"> Receiver</th>
+                        <th style="width: 20%"> Date</th>
+                        <th style="width: 10%"> Amount(€)</th>
+                        <th style="width: 10%"> Fee Amount(€)</th>
+                        <th style="width: 10%"> Fee(%)</th>
+                        <th style="width: 30%"> Description</th>
                     </tr>
                     </thead>
                     <tbody th:each="transactionsSent: ${transactionsSent}" th:remove="tag">
@@ -118,12 +118,12 @@
                 <table class="table table-striped">
                     <thead class="table-light">
                     <tr>
-                        <th scope="col"> Sender</th>
-                        <th scope="col"> Date</th>
-                        <th scope="col"> Amount(€)</th>
-                        <th scope="col"> Fee Amount(€)</th>
-                        <th scope="col"> Fee(%)</th>
-                        <th scope="col"> Description</th>
+                        <th style="width: 20%"> Sender</th>
+                        <th style="width: 20%"> Date</th>
+                        <th style="width: 10%"> Amount(€)</th>
+                        <th style="width: 10%"> Fee Amount(€)</th>
+                        <th style="width: 10%"> Fee(%)</th>
+                        <th style="width: 30%"> Description</th>
                     </tr>
                     </thead>
                     <tbody th:each="transactionsReceiver: ${transactionsReceiver}" th:remove="tag">
