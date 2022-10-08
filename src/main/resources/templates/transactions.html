@@ -86,9 +86,8 @@
                     <tr>
                         <th style="width: 20%"> Receiver</th>
                         <th style="width: 20%"> Date</th>
-                        <th style="width: 10%"> Amount(€)</th>
-                        <th style="width: 10%"> Fee Amount(€)</th>
-                        <th style="width: 10%"> Fee(%)</th>
+                        <th style="width: 20%"> Amount (€)</th>
+                        <th style="width: 10%"> Fee (€)</th>
                         <th style="width: 30%"> Description</th>
                     </tr>
                     </thead>
@@ -101,8 +100,6 @@
                         <td th:text="${#numbers.formatDecimal(transactionsSent.amount,1,'WHITESPACE',2,'POINT')}"
                             style="font-size:0.9em;vertical-align: middle"></td>
                         <td th:text="${#numbers.formatDecimal(transactionsSent.fee,1,'WHITESPACE',2,'POINT')}"
-                            style="font-size:0.9em;vertical-align: middle;color:grey;"></td>
-                        <td th:text="${#numbers.formatDecimal(transactionsSent.feeRate,1,'WHITESPACE',1,'POINT')}"
                             style="font-size:0.9em;vertical-align: middle;color:grey;"></td>
                         <td th:text="${transactionsSent.description}"
                             style="font-size:0.7em;vertical-align: middle;"></td>
@@ -120,9 +117,8 @@
                     <tr>
                         <th style="width: 20%"> Sender</th>
                         <th style="width: 20%"> Date</th>
-                        <th style="width: 10%"> Amount(€)</th>
-                        <th style="width: 10%"> Fee Amount(€)</th>
-                        <th style="width: 10%"> Fee(%)</th>
+                        <th style="width: 20%"> Amount (€)</th>
+                        <th style="width: 10%"> Fee (€)</th>
                         <th style="width: 30%"> Description</th>
                     </tr>
                     </thead>
@@ -135,8 +131,6 @@
                         <td th:text="${#numbers.formatDecimal(transactionsReceiver.amount,1,'WHITESPACE',2,'POINT')}"
                             style="font-size:0.9em;vertical-align: middle"></td>
                         <td th:text="${#numbers.formatDecimal(transactionsReceiver.fee,1,'WHITESPACE',2,'POINT')}"
-                            style="font-size:0.9em;vertical-align: middle;color:grey;"></td>
-                        <td th:text="${#numbers.formatDecimal(transactionsReceiver.feeRate,1,'WHITESPACE',1,'POINT')}"
                             style="font-size:0.9em;vertical-align: middle;color:grey;"></td>
                         <td th:text="${transactionsReceiver.description}"
                             style="font-size:0.7em;vertical-align: middle;"></td>
