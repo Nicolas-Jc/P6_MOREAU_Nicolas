@@ -1,7 +1,6 @@
 package com.openclassrooms.paymybuddy.model;
 
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -35,8 +34,6 @@ public class UserTransaction {
     @JoinColumn(name = "receiver_id", referencedColumnName = "user_id")
     private User receiver;
 
-    private Float feeRate;
-
     public UserTransaction() {
     }
 
@@ -48,17 +45,6 @@ public class UserTransaction {
         this.description = description;
         this.sender = sender;
         this.receiver = receiver;
-    }
-
-    public UserTransaction(Integer userTransactionId, Float amount, Float fee, LocalDateTime transactionDate, String description, User sender, User receiver, Float feeRate) {
-        this.userTransactionId = userTransactionId;
-        this.amount = amount;
-        this.fee = fee;
-        this.transactionDate = transactionDate;
-        this.description = description;
-        this.sender = sender;
-        this.receiver = receiver;
-        this.feeRate = feeRate;
     }
 
     public UserTransaction(User sender, User receiver, LocalDateTime dateTime, Float receiveAmount, String description, float fee) {
@@ -126,11 +112,5 @@ public class UserTransaction {
         this.receiver = receiver;
     }
 
-    public Float getFeeRate() {
-        return (fee / amount) * 100;
-    }
 
-    public void setFeeRate(Float feeRate) {
-        this.feeRate = feeRate;
-    }
 }
