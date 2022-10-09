@@ -22,9 +22,9 @@ import java.security.Principal;
 @Controller
 public class HomeController {
 
-    private static Logger logger = LogManager.getLogger("HomeController");
+    private static final Logger logger = LogManager.getLogger("HomeController");
 
-    final Float MAX_AMOUNT_DEPOSIT = 10000f;
+    static final float MAX_AMOUNT_DEPOSIT = 10000f;
 
     private String redirectHome = "redirect:/home";
 
@@ -116,9 +116,6 @@ public class HomeController {
             return new ModelAndView(redirectHome);
         }
 
-        //String userEmail = principal.getName();
-        //User userBalance = userService.getUserByEmail(userEmail);
-
         if (depositAmount < 0) {
             redirAttrs.addFlashAttribute("errorAmount", "Negative amount not allowed !");
             logger.warn("Negative amount not allowed");
@@ -148,8 +145,6 @@ public class HomeController {
             return new ModelAndView(redirectHome);
         }
 
-        //String userEmail = principal.getName();
-        //User userBalance = userService.getUserByEmail(userEmail);
         Float balance = connectedUser.getBalance();
 
         if (Float.compare(withdrawAmount, balance) > 0) {

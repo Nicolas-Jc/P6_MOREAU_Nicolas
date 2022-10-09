@@ -15,7 +15,7 @@
 </head>
 <body>
 <!--Navigation bar Bootstrap 5.1 Header -->
-<nav class="navbar fixed-top navbar-expand navbar-light">
+<nav class="navbar navbar-expand navbar-light">
     <div class="container-fluid">
         <!--<a class="navbar-brand" href="#" th:href="@{/}"><i class="bi bi-cash-coin" style="font-size: 200%;"></i></a>-->
         <a class="navbar-brand bg-success text-light rounded-pill px-3" href="#" th:href="@{/}"> Pay My Buddy </a>
@@ -28,10 +28,12 @@
                 <!--   sec:authorize="isAuthenticated()"
                => This content is only shown to authenticated users-->
                 <a class="nav-link" href="#" th:href="@{/}" sec:authorize="isAuthenticated()"> Home </a>
-                <a class="nav-link active bg-success text-light" aria-current="page" href="/contacts"
+                <a class="nav-link active active text-primary" aria-current="page" href="/contacts"
                    sec:authorize="isAuthenticated()">
                     Connections </a>
-                <a class="nav-link" href="/transactions" sec:authorize="isAuthenticated()"> Transactions </a>
+                <a class="nav-link" href="/transactions" sec:authorize="isAuthenticated()"> TRANSACTION </a>
+                <a class="nav-link" href="/mypayments" sec:authorize="isAuthenticated()"> My Payments </a>
+                <a class="nav-link" href="/myrefunds" sec:authorize="isAuthenticated()"> My Refunds </a>
                 <a class="nav-link" th:href="@{/logout}" sec:authorize="isAuthenticated()"> logout</a>
             </div>
         </div>
@@ -39,7 +41,7 @@
 </nav>
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-4 text-center">
+        <div class="col-5 text-center">
             <section class="bg-light border border-1 px-lg-2">
                 <!-- Messages dynamiques -->
                 <div th:if="${searchError}" th:class="${alert}">
@@ -52,7 +54,7 @@
                     <div class="alert alert-success" th:text="${addContactSuccess}"></div>
                 </div>
                 <!-- Contact à rechercher -->
-                <h4> Search Contacts </h4>
+                <h4 class="text-start"> Search Contacts </h4>
                 <form th:action="@{/findContact}" method="get">
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text" id="addon-wrapping"> Enter email: </span>
@@ -71,7 +73,7 @@
                         <div class="input-group flex-nowrap mb-3">
                             <input th:value="${searchContact.email}" name="email" type="email" class="form-control"
                                    placeholder="Enter email">
-                            <button type="submit" class="btn btn-success"> Add to contacts</button>
+                            <button type="submit" class="btn btn-primary"> Add to contacts</button>
                         </div>
                     </form>
                 </div>
@@ -79,16 +81,16 @@
 
             <!-- LISTE des contacts rattachés au User connecté -->
             <section class="mt-5 bg-light border border-1 px-lg-2">
-                <h4> Contacts List (Number:
+                <h4 class="text-start"> Contacts List (Number:
                     <th:block th:text="${#lists.size(contactsList)}"></th:block>
                     )
                 </h4>
                 <table class="table table-striped">
                     <thead class="table-light">
                     <tr>
-                        <th scope="col"> Last Name</th>
-                        <th scope="col"> First Name</th>
-                        <th scope="col"> Email</th>
+                        <th scope="col" class="table-success" style="width: 30%"> Last Name</th>
+                        <th scope="col" class="table-success" style="width: 30%"> First Name</th>
+                        <th scope="col" class="table-success" style="width: 40%"> Email</th>
                     </tr>
                     </thead>
                     <tbody th:each="user : ${contactsList}" th:remove="tag">

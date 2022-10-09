@@ -11,7 +11,7 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <!-- Bootstrap icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-    <title>My Payments</title>
+    <title>My Refunds</title>
 </head>
 <body>
 <!--Navigation bar Bootstrap 5.1 Header -->
@@ -29,10 +29,10 @@
                 <a class="nav-link" href="#" th:href="@{/}" sec:authorize="isAuthenticated()"> Home </a>
                 <a class="nav-link" href="/contacts" sec:authorize="isAuthenticated()"> Connections </a>
                 <a class="nav-link" href="/transactions" sec:authorize="isAuthenticated()"> TRANSACTION </a>
-                <a class="nav-link active text-primary" aria-current="page" href="/mypayments"
+                <a class="nav-link" href="/mypayments" sec:authorize="isAuthenticated()"> My Payments </a>
+                <a class="nav-link active text-primary" aria-current="page" href="/myrefunds"
                    sec:authorize="isAuthenticated()">
-                    My Payments </a>
-                <a class="nav-link" href="/myrefunds" sec:authorize="isAuthenticated()"> My Refunds </a>
+                    My Refunds </a>
                 <a class="nav-link" th:href="@{/logout}" sec:authorize="isAuthenticated()"> logout</a>
             </div>
         </div>
@@ -42,28 +42,28 @@
     <div class="row justify-content-center">
         <div class="col-7 text-center ">
             <section class="mt-5 bg-light border border-1 px-lg-2">
-                <h4 class="text-start"> My Payments </h4>
+                <h4 class="text-start"> My Refunds </h4>
                 <table class="table table-striped">
                     <thead class="table-light">
                     <tr>
-                        <th style="width: 20%" class="table-success"> Receiver</th>
+                        <th style="width: 20%" class="table-success"> Sender</th>
                         <th style="width: 20%" class="table-success"> Date</th>
                         <th style="width: 20%" class="table-success"> Amount (€)</th>
                         <th style="width: 10%" class="table-success"> Fee (€)</th>
                         <th style="width: 30%" class="table-success"> Description</th>
                     </tr>
                     </thead>
-                    <tbody th:each="transactionsSent: ${transactionsSent.page.content}" th:remove="tag">
+                    <tbody th:each="transactionsReceiver: ${transactionsReceiver.page.content}" th:remove="tag">
                     <tr>
-                        <td th:text="${transactionsSent.receiver.firstname}+' '+${transactionsSent.receiver.lastname}"
+                        <td th:text="${transactionsReceiver.sender.firstname}+' '+${transactionsReceiver.sender.lastname}"
                             style="font-size:0.9em;vertical-align: middle"></td>
-                        <td th:text="${#temporals.format(transactionsSent.transactionDate, 'dd-MM-yyyy HH:mm')}"
-                            style="font-size:0.8em;vertical-align: middle;"></td>
-                        <td th:text="${#numbers.formatDecimal(transactionsSent.amount,1,'WHITESPACE',2,'POINT')}"
+                        <td th:text="${#temporals.format(transactionsReceiver.transactionDate, 'dd-MM-yyyy HH:mm')}"
+                            style="font-size:0.8em;vertical-align: middle"></td>
+                        <td th:text="${#numbers.formatDecimal(transactionsReceiver.amount,1,'WHITESPACE',2,'POINT')}"
                             style="font-size:0.9em;vertical-align: middle"></td>
-                        <td th:text="${#numbers.formatDecimal(transactionsSent.fee,1,'WHITESPACE',2,'POINT')}"
+                        <td th:text="${#numbers.formatDecimal(transactionsReceiver.fee,1,'WHITESPACE',2,'POINT')}"
                             style="font-size:0.9em;vertical-align: middle;color:grey;"></td>
-                        <td th:text="${transactionsSent.description}"
+                        <td th:text="${transactionsReceiver.description}"
                             style="font-size:0.7em;vertical-align: middle;"></td>
                     </tr>
                     </tbody>
@@ -71,18 +71,18 @@
             </section>
             <section> <!-- Pagination -->
                 <nav aria-label="Page navigation" class="paging">
-                    <ul class="pagination" th:if="${transactionsSent.page.totalPages > 1}">
+                    <ul class="pagination" th:if="${transactionsReceiver.page.totalPages > 1}">
                         <li class="page-item"
-                            th:classappend="${!transactionsSent.paging.isPrevEnabled()? 'disabled' : ''}">
+                            th:classappend="${!transactionsReceiver.paging.isPrevEnabled()? 'disabled' : ''}">
                             <a class="page-link"
-                               th:href="@{'/mypayments?pageNumber=' + ${transactionsSent.paging.pageNumber - 1}}"
+                               th:href="@{'/myrefunds?pageNumber=' + ${transactionsReceiver.paging.pageNumber - 1}}"
                                tabindex="-1"><span aria-hidden="true">&laquo;</span></a>
                         </li>
-                        <th:block th:each="item : ${transactionsSent.paging.getItems()}">
+                        <th:block th:each="item : ${transactionsReceiver.paging.getItems()}">
                             <li class="page-item"
-                                th:classappend="${item.index == transactionsSent.paging.pageNumber? 'active' : ''}"
+                                th:classappend="${item.index == transactionsReceiver.paging.pageNumber? 'active' : ''}"
                                 th:if="${item.pageItemType.name() == 'PAGE'}">
-                                <a class="page-link" th:href="@{'/mypayments?pageNumber=' + ${item.index}}"
+                                <a class="page-link" th:href="@{'/myrefunds?pageNumber=' + ${item.index}}"
                                    th:text="${item.index}"></a>
                             </li>
                             <li class="page-item disabled" th:if="${item.pageItemType.name() == 'DOTS'}">
@@ -90,9 +90,9 @@
                             </li>
                         </th:block>
                         <li class="page-item"
-                            th:classappend="${!transactionsSent.paging.isNextEnabled()? 'disabled' : ''}">
+                            th:classappend="${!transactionsReceiver.paging.isNextEnabled()? 'disabled' : ''}">
                             <a class="page-link"
-                               th:href="@{'/mypayments?pageNumber=' + ${transactionsSent.paging.pageNumber + 1}}">
+                               th:href="@{'/myrefunds?pageNumber=' + ${transactionsReceiver.paging.pageNumber + 1}}">
                                 <span aria-hidden="true">&raquo;</span></a>
                         </li>
                     </ul>

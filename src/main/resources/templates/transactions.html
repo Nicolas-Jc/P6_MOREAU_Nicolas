@@ -15,7 +15,7 @@
 </head>
 <body>
 <!--Navigation bar Bootstrap 5.1 Header -->
-<nav class="navbar fixed-top navbar-expand navbar-light ">
+<nav class="navbar navbar-expand navbar-light ">
     <div class="container-fluid">
         <a class="navbar-brand bg-success text-light rounded-pill px-3" href="#" th:href="@{/}"> Pay My Buddy </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
@@ -28,9 +28,11 @@
                => This content is only shown to authenticated users-->
                 <a class="nav-link" href="#" th:href="@{/}" sec:authorize="isAuthenticated()"> Home </a>
                 <a class="nav-link" href="/contacts" sec:authorize="isAuthenticated()"> Connections </a>
-                <a class="nav-link active bg-success text-light" aria-current="page" href="/transactions"
+                <a class="nav-link active text-primary" aria-current="page" href="/transactions"
                    sec:authorize="isAuthenticated()">
-                    Transactions </a>
+                    TRANSACTION </a>
+                <a class="nav-link" href="/mypayments" sec:authorize="isAuthenticated()"> My Payments </a>
+                <a class="nav-link" href="/myrefunds" sec:authorize="isAuthenticated()"> My Refunds </a>
                 <a class="nav-link" th:href="@{/logout}" sec:authorize="isAuthenticated()"> logout</a>
             </div>
         </div>
@@ -38,7 +40,7 @@
 </nav>
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-6 text-center ">
+        <div class="col-5 text-center ">
             <section class="bg-light border border-1 px-lg-2">
                 <!-- Messages -->
                 <div th:if="${transactionSuccess}" th:class="${alert}">
@@ -47,7 +49,7 @@
                 <div th:if="${errorAmount}" th:class="${alert}">
                     <div class="alert alert-danger" th:text="${errorAmount}"></div>
                 </div>
-                <h4>Send Money</h4>
+                <h4 class="text-start">Send Money</h4>
                 <form th:action="@{/sendmoney}" method="post" th:object="${transaction}">
                     <div class="input-group input-group-sm mb-3">
                         <span class="input-group-text col-3 justify-content-center"
@@ -66,8 +68,8 @@
                     </div>
                     <div class="input-group input-group-sm mb-3">
                         <span class="input-group-text col-3 justify-content-center"> Description </span>
-                        <input type="text" class="form-control" maxlength="35" name="description"
-                               placeholder="Details of the transaction - Maximum 35 characters" required>
+                        <input type="text" class="form-control" maxlength="25" name="description"
+                               placeholder="Details of the transaction - Maximum 25 characters" required>
                     </div>
                     <!-- Send money button -->
                     <div class="d-grid gap-2 col-3 mx-auto mb-3">
@@ -75,68 +77,6 @@
                                value="Send money">
                     </div>
                 </form>
-            </section>
-            <section class="mt-5 bg-light border border-1 px-lg-2">
-                <h4> My Payments (Number:
-                    <th:block th:text="${#lists.size(transactionsSent)}"></th:block>
-                    )
-                </h4>
-                <table class="table table-striped">
-                    <thead class="table-light">
-                    <tr>
-                        <th style="width: 20%"> Receiver</th>
-                        <th style="width: 20%"> Date</th>
-                        <th style="width: 20%"> Amount (€)</th>
-                        <th style="width: 10%"> Fee (€)</th>
-                        <th style="width: 30%"> Description</th>
-                    </tr>
-                    </thead>
-                    <tbody th:each="transactionsSent: ${transactionsSent}" th:remove="tag">
-                    <tr>
-                        <td th:text="${transactionsSent.receiver.firstname}+' '+${transactionsSent.receiver.lastname}"
-                            style="font-size:0.9em;vertical-align: middle"></td>
-                        <td th:text="${#temporals.format(transactionsSent.transactionDate, 'dd-MM-yyyy HH:mm')}"
-                            style="font-size:0.8em;vertical-align: middle;"></td>
-                        <td th:text="${#numbers.formatDecimal(transactionsSent.amount,1,'WHITESPACE',2,'POINT')}"
-                            style="font-size:0.9em;vertical-align: middle"></td>
-                        <td th:text="${#numbers.formatDecimal(transactionsSent.fee,1,'WHITESPACE',2,'POINT')}"
-                            style="font-size:0.9em;vertical-align: middle;color:grey;"></td>
-                        <td th:text="${transactionsSent.description}"
-                            style="font-size:0.7em;vertical-align: middle;"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </section>
-            <section class="mt-5 bg-light border border-1 px-lg-2">
-                <h4> My Refunds (Number:
-                    <th:block th:text="${#lists.size(transactionsReceiver)}"></th:block>
-                    )
-                </h4>
-                <table class="table table-striped">
-                    <thead class="table-light">
-                    <tr>
-                        <th style="width: 20%"> Sender</th>
-                        <th style="width: 20%"> Date</th>
-                        <th style="width: 20%"> Amount (€)</th>
-                        <th style="width: 10%"> Fee (€)</th>
-                        <th style="width: 30%"> Description</th>
-                    </tr>
-                    </thead>
-                    <tbody th:each="transactionsReceiver: ${transactionsReceiver}" th:remove="tag">
-                    <tr>
-                        <td th:text="${transactionsReceiver.sender.firstname}+' '+${transactionsReceiver.sender.lastname}"
-                            style="font-size:0.9em;vertical-align: middle"></td>
-                        <td th:text="${#temporals.format(transactionsReceiver.transactionDate, 'dd-MM-yyyy HH:mm')}"
-                            style="font-size:0.8em;vertical-align: middle"></td>
-                        <td th:text="${#numbers.formatDecimal(transactionsReceiver.amount,1,'WHITESPACE',2,'POINT')}"
-                            style="font-size:0.9em;vertical-align: middle"></td>
-                        <td th:text="${#numbers.formatDecimal(transactionsReceiver.fee,1,'WHITESPACE',2,'POINT')}"
-                            style="font-size:0.9em;vertical-align: middle;color:grey;"></td>
-                        <td th:text="${transactionsReceiver.description}"
-                            style="font-size:0.7em;vertical-align: middle;"></td>
-                    </tr>
-                    </tbody>
-                </table>
             </section>
             <p class="fw-light"> Connected User: <span sec:authentication="principal.username"> </span></p>
         </div>

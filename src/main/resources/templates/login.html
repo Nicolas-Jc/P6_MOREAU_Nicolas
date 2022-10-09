@@ -15,7 +15,7 @@
 </head>
 <body>
 <!--Navigation bar Bootstrap 5.1 Header -->
-<nav class="navbar fixed-top navbar-expand navbar-light">
+<nav class="navbar navbar-expand navbar-light">
     <div class="container-fluid">
         <a class="navbar-brand bg-success text-light rounded-pill px-3" href="#" th:href="@{/}"> Pay My Buddy </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
@@ -28,7 +28,9 @@
                 => This content is only shown to authenticated users-->
                 <a class="nav-link" href="#" th:href="@{/}" sec:authorize="isAuthenticated()"> Home </a>
                 <a class="nav-link" href="/contacts" sec:authorize="isAuthenticated()"> Connections </a>
-                <a class="nav-link" href="/transactions" sec:authorize="isAuthenticated()"> Transactions </a>
+                <a class="nav-link" href="/transactions" sec:authorize="isAuthenticated()"> TRANSACTION </a>
+                <a class="nav-link" href="/mypayments" sec:authorize="isAuthenticated()"> My Payments </a>
+                <a class="nav-link" href="/myrefunds" sec:authorize="isAuthenticated()"> My Refunds </a>
                 <a class="nav-link" th:href="@{/logout}" sec:authorize="isAuthenticated()"> logout</a>
             </div>
         </div>

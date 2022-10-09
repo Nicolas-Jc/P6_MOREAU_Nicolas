@@ -15,7 +15,7 @@
 </head>
 <body>
 <!--Navigation bar Bootstrap 5.1 Header -->
-<nav class="navbar fixed-top navbar-expand navbar-light">
+<nav class="navbar navbar-expand navbar-light">
     <div class="container-fluid">
         <a class="navbar-brand bg-success text-light rounded-pill px-3" href="#" th:href="@{/}"> Pay My Buddy </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
@@ -26,10 +26,12 @@
             <div class="navbar-nav">
                 <!--   sec:authorize="isAuthenticated()"
                => This content is only shown to authenticated users-->
-                <a class="nav-link" href="#" th:href="@{/}" sec:authorize="isAuthenticated()"> Home </a>
+                <a class="nav-link active text-primary" aria-current="page" href="#" th:href="@{/}"
+                   sec:authorize="isAuthenticated()"> Home </a>
                 <a class="nav-link" href="/contacts" sec:authorize="isAuthenticated()"> Connections </a>
-                <a class="nav-link" href="/transactions" sec:authorize="isAuthenticated()"> Transactions </a>
+                <a class="nav-link" href="/transactions" sec:authorize="isAuthenticated()"> TRANSACTION </a>
                 <a class="nav-link" href="/mypayments" sec:authorize="isAuthenticated()"> My Payments </a>
+                <a class="nav-link" href="/myrefunds" sec:authorize="isAuthenticated()"> My Refunds </a>
                 <a class="nav-link" th:href="@{/logout}" sec:authorize="isAuthenticated()"> logout</a>
             </div>
         </div>
@@ -40,14 +42,14 @@
     <div class="row justify-content-center">
         <div class="col-auto text-center">
             <section class="bg-light border border-1 px-lg-2">
-                <h3> Balance </h3>
-                <div class="row list-inline-item">
+                <h4 class="text-start "> Balance </h4>
+                <div class="row list-inline-item justify-content-center">
                     <!--<div class="input-group-text col-10 justify-content-center"
                          th:text="${user.balance}">-->
-                    <div class="input-group-text col-10 justify-content-center"
+                    <div class="input-group-text col-5 justify-content-center fw-bold"
                          th:text="${#numbers.formatDecimal(user.balance,1,'WHITESPACE',2,'POINT')}">
                     </div>
-                    <div class="input-group-text col-2 justify-content-center"> €</div>
+                    <div class="input-group-text col-1 justify-content-center"> €</div>
                 </div>
                 <br>
                 <div th:if="${errorAmount}" th:class="${alert}">
@@ -61,7 +63,7 @@
                         </div>
                         <!-- money button -->
                         <div class="d-grid gap-2 col-6 mx-auto">
-                            <input class="form-control btn btn-success btn" type="submit" name="deposite"
+                            <input class="form-control btn btn-success" type="submit" name="deposite"
                                    value="Deposite">
                         </div>
                     </form>
@@ -79,7 +81,7 @@
                 </div>
             </section>
             <section class="mt-5 bg-light border border-1 px-lg-2">
-                <h3> Bank Account </h3>
+                <h4 class="text-start"> Bank Account </h4>
                 <div th:if="${bankAccountUpdated}" th:class="${alert}">
                     <div class="alert alert-success"> Bank Account updated</div>
                 </div>
