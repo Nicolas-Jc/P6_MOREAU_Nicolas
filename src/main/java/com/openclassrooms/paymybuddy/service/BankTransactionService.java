@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -24,6 +25,7 @@ public class BankTransactionService {
     private BankTransactionRepository bankTransactionRepository;
 
 
+    @Transactional
     public BankTransaction depositMoneyToBalance(User user, Float deposit) {
         // ETAPE 1 : Création et enregistrement Transaction
         BankTransaction bankTransaction = new BankTransaction();
@@ -46,6 +48,7 @@ public class BankTransactionService {
         return bankTransaction;
     }
 
+    @Transactional
     public BankTransaction withdrawMoneyFromBalance(User user, Float withdraw) {
         // ETAPE 1 : Création et enregistrement Transaction
         BankTransaction bankTransaction = new BankTransaction();

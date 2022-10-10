@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -72,6 +73,7 @@ public class UserTransactionService {
         return new Paged<>(new Page<>(paged, totalPages), Paging.of(totalPages, pageNumber, size));
     }
 
+    @Transactional
     public void sendMoney(User sender, String emailReceiver, String description, Float amount) {
         User receiver = userService.getUserByEmail(emailReceiver);
         // Montant des frais

@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class BankAccountService {
@@ -16,6 +17,7 @@ public class BankAccountService {
 
     private static Logger logger = LogManager.getLogger("BankAccountService");
 
+    @Transactional
     public void addBankAccount(BankAccount bankAccount) {
 
         User userToAddBank = bankAccount.getUser();
@@ -26,6 +28,7 @@ public class BankAccountService {
         bankAccountRepository.saveAndFlush(bankAccount);
     }
 
+    @Transactional
     public void updateBankAccount(Integer bankAccountId, BankAccount accountToUpdate) {
         BankAccount bankAccountToFind = getBankAccountById(bankAccountId);
         // Le compte bancaire existe

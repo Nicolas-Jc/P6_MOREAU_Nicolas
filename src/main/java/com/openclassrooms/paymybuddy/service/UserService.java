@@ -22,6 +22,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    @Transactional
     public User addUser(User user) {
         User verifUserToAdd = getUserByEmail(user.getEmail());
         // Email inexistant en base. Création User possible
@@ -46,6 +47,7 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    @Transactional
     public User updateUser(String userEmail, String lastName, String firstName, String password) {
         User userToUpdate = userRepository.findByEmail(userEmail);
         // User existant. Seules les informations Lastname, firstname, password

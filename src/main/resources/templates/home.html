@@ -29,7 +29,7 @@
                 <a class="nav-link active text-primary" aria-current="page" href="#" th:href="@{/}"
                    sec:authorize="isAuthenticated()"> Home </a>
                 <a class="nav-link" href="/contacts" sec:authorize="isAuthenticated()"> Connections </a>
-                <a class="nav-link" href="/transactions" sec:authorize="isAuthenticated()"> TRANSACTION </a>
+                <a class="nav-link" href="/transactions" sec:authorize="isAuthenticated()"> TRANSFER </a>
                 <a class="nav-link" href="/mypayments" sec:authorize="isAuthenticated()"> My Payments </a>
                 <a class="nav-link" href="/myrefunds" sec:authorize="isAuthenticated()"> My Refunds </a>
                 <a class="nav-link" th:href="@{/logout}" sec:authorize="isAuthenticated()"> logout</a>
@@ -58,7 +58,8 @@
                 <div class="d-inline-flex flexbd-highlight mb-3">
                     <form th:action="@{/deposit}" method="post" th:object="${user}" style="margin-left: 15px;">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" name="depositAmount" placeholder="00.00"
+                            <input type="text" class="form-control" name="depositAmount"
+                                   placeholder="00.00 (Max.: 10.000 €)"
                                    style="text-align:center" required>
                         </div>
                         <!-- money button -->
