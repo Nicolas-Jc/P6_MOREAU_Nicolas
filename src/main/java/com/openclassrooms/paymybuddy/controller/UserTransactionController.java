@@ -49,7 +49,7 @@ public class UserTransactionController {
     // Fourniture données à la vue My Payments
     @GetMapping("/mypayments")
     public String myPaymentsLoad(@RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
-                                 @RequestParam(value = "size", required = false, defaultValue = "5") int size, Model model, Principal principal) {
+                                 @RequestParam(value = "size", required = false, defaultValue = "15") int size, Model model, Principal principal) {
 
         String userEmail = principal.getName();
         User userConnected = userService.getUserByEmail(userEmail);
@@ -63,7 +63,7 @@ public class UserTransactionController {
     // Fourniture données à la vue My Refunds
     @GetMapping("/myrefunds")
     public String myRefundsLoad(@RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
-                                @RequestParam(value = "size", required = false, defaultValue = "5") int size, Model model, Principal principal) {
+                                @RequestParam(value = "size", required = false, defaultValue = "15") int size, Model model, Principal principal) {
 
         String userEmail = principal.getName();
         User userConnected = userService.getUserByEmail(userEmail);

@@ -51,13 +51,13 @@
                 </div>
                 <h4 class="text-start">Send Money</h4>
                 <form th:action="@{/sendmoney}" method="post" th:object="${transaction}">
-                    <div class="input-group input-group-sm mb-3">
+                    <div class="input-group input-group-sm mb-4">
                         <span class="input-group-text col-3 justify-content-center"
                               th:text="${#numbers.formatDecimal(user.balance,1,'WHITESPACE',2,'POINT')}"></span>
                         <span class="input-group-text"> € </span>
-                        <input type="text" class="form-control" name="amount" placeholder="1.00" required>
+                        <input type="number" class="form-control" name="amount" placeholder="1.00" required>
                     </div>
-                    <div class="input-group input-group-sm mb-3">
+                    <div class="input-group input-group-sm mb-4">
                         <span class="input-group-text col-3 justify-content-center"> Contacts</span>
                         <select class="form-select form-select-sm" name="emailReceiver" required>
                             <option selected th:value="email"> Select contact to send money</option>
@@ -66,7 +66,7 @@
                                     th:value="${user.email}"></option>
                         </select>
                     </div>
-                    <div class="input-group input-group-sm mb-3">
+                    <div class="input-group input-group-sm mb-4">
                         <span class="input-group-text col-3 justify-content-center"> Description </span>
                         <input type="text" class="form-control" maxlength="25" name="description"
                                placeholder="Details of the transaction - Maximum 25 characters" required>

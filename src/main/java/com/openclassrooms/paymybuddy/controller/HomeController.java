@@ -123,6 +123,7 @@ public class HomeController {
         }
         bankTransactionService.depositMoneyToBalance(connectedUser, depositAmount);
         redirAttrs.addFlashAttribute("balance", connectedUser);
+        redirAttrs.addFlashAttribute("transactionSuccess", "Success deposit money to balance !");
         logger.info("Money deposited to balance");
         return new ModelAndView(redirectHome);
     }
@@ -154,6 +155,7 @@ public class HomeController {
         }
         bankTransactionService.withdrawMoneyFromBalance(connectedUser, withdrawAmount);
         redirAttrs.addFlashAttribute("balance", connectedUser);
+        redirAttrs.addFlashAttribute("transactionSuccess", "Success withdraw money from balance !");
         logger.info("Money withdraw from balance");
         return new ModelAndView(redirectHome);
     }

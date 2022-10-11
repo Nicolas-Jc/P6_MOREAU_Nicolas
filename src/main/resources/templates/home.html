@@ -52,13 +52,16 @@
                     <div class="input-group-text col-1 justify-content-center"> €</div>
                 </div>
                 <br>
+                <div th:if="${transactionSuccess}" th:class="${alert}">
+                    <div class="alert alert-success" th:text="${transactionSuccess}"></div>
+                </div>
                 <div th:if="${errorAmount}" th:class="${alert}">
                     <div class="alert alert-danger" th:text="${errorAmount}"></div>
                 </div>
                 <div class="d-inline-flex flexbd-highlight mb-3">
                     <form th:action="@{/deposit}" method="post" th:object="${user}" style="margin-left: 15px;">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" name="depositAmount"
+                            <input type="number" class="form-control" name="depositAmount"
                                    placeholder="00.00 (Max.: 10.000 €)"
                                    style="text-align:center" required>
                         </div>
@@ -70,7 +73,7 @@
                     </form>
                     <form th:action="@{/withdraw}" method="post" th:object="${user}" style="margin-right: 15px;">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" name="withdrawAmount" placeholder="00.00"
+                            <input type="number" class="form-control" name="withdrawAmount" placeholder="00.00"
                                    style="text-align:center" required>
                         </div>
                         <!-- money button -->

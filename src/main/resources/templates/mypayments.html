@@ -46,7 +46,6 @@
                 <table class="table table-striped">
                     <thead class="table-light">
                     <tr>
-                        <th style="width: 20%" class="table-success"> Receiver</th>
                         <th style="width: 20%" class="table-success"> Date</th>
                         <th style="width: 20%" class="table-success"> Amount (€)</th>
                         <th style="width: 10%" class="table-success"> Fee (€)</th>
@@ -55,8 +54,6 @@
                     </thead>
                     <tbody th:each="transactionsSent: ${transactionsSent.page.content}" th:remove="tag">
                     <tr>
-                        <td th:text="${transactionsSent.receiver.firstname}+' '+${transactionsSent.receiver.lastname}"
-                            style="font-size:0.9em;vertical-align: middle"></td>
                         <td th:text="${#temporals.format(transactionsSent.transactionDate, 'dd-MM-yyyy HH:mm')}"
                             style="font-size:0.8em;vertical-align: middle;"></td>
                         <td th:text="${#numbers.formatDecimal(transactionsSent.amount,1,'WHITESPACE',2,'POINT')}"
