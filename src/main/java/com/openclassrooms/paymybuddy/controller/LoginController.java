@@ -12,11 +12,4 @@ public class LoginController {
         return "login";
     }
 
-    /*@GetMapping(value = "/error")
-    public String unauthorizedAccess(Model model) {
-        model.addAttribute("message", "You not have permission to access this page !");
-        logger.error("Error unauthorized Access");
-        return "error";
-    }*/
-
 }

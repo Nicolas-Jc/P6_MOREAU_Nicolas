@@ -19,7 +19,8 @@ import java.util.List;
 
 @Controller
 public class ContactController {
-    private static Logger logger = LogManager.getLogger("ContactController");
+    private static final Logger logger = LogManager.getLogger("ContactController");
+    private static final String REDIRECT_CONTACTS = "redirect:/contacts";
 
     @Autowired
     private final UserService userService;
@@ -36,12 +37,12 @@ public class ContactController {
         if (contactToFind == null) {
             redirAttrs.addFlashAttribute("searchError", "Email not found");
             logger.warn("Email not found: {}", email);
-            return "redirect:/contacts";
+            return REDIRECT_CONTACTS;
         }
         // Activation Div "User found"
         redirAttrs.addFlashAttribute("searchContact", contactToFind);
         logger.info("Email address found: {}", email);
-        return "redirect:/contacts";
+        return REDIRECT_CONTACTS;
     }
 
     // Ajout d'un contact à la liste
@@ -53,13 +54,13 @@ public class ContactController {
         if (contactToAdd == null || userConnected.getContactsList().contains(contactToAdd)) {
             logger.warn("Email Error, user not found OR user already in Contacts List");
             redirAttrs.addFlashAttribute("addError", "Email Error, user not found OR user already in Contacts List");
-            return "redirect:/contacts";
+            return REDIRECT_CONTACTS;
         }
         userService.addContact(userConnected, contactToAdd);
         logger.info("Contact added to list");
         model.addAttribute("addContactSuccess",
                 "Contact have been added to your list");
-        return "redirect:/contacts";
+        return REDIRECT_CONTACTS;
     }
 
     // - Chargement et affichage liste des contacts

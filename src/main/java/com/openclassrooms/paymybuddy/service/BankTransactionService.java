@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Service
 public class BankTransactionService {
 
-    private static Logger logger = LogManager.getLogger("BankTransactionService");
+    private static final Logger logger = LogManager.getLogger("BankTransactionService");
 
     @Autowired
     private UserRepository userRepository;
@@ -26,7 +26,7 @@ public class BankTransactionService {
 
 
     @Transactional
-    public BankTransaction depositMoneyToBalance(User user, Float deposit) {
+    public void depositMoneyToBalance(User user, Float deposit) {
         // ETAPE 1 : Création et enregistrement Transaction
         BankTransaction bankTransaction = new BankTransaction();
 
@@ -45,11 +45,10 @@ public class BankTransactionService {
         userRepository.saveAndFlush(user);
         logger.info("money deposited in the account");
 
-        return bankTransaction;
     }
 
     @Transactional
-    public BankTransaction withdrawMoneyFromBalance(User user, Float withdraw) {
+    public void withdrawMoneyFromBalance(User user, Float withdraw) {
         // ETAPE 1 : Création et enregistrement Transaction
         BankTransaction bankTransaction = new BankTransaction();
 
@@ -68,6 +67,5 @@ public class BankTransactionService {
         userRepository.saveAndFlush(user);
         logger.info("money withdrawed from the account");
 
-        return bankTransaction;
     }
 }

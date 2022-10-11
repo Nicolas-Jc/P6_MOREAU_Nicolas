@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
 
-    private static Logger logger = LogManager.getLogger("UserService");
+    private static final Logger logger = LogManager.getLogger("UserService");
     @Autowired
     private UserRepository userRepository;
 
@@ -53,7 +53,7 @@ public class UserService {
         // User existant. Seules les informations Lastname, firstname, password
         // peuvent être mises à jour
         if (userToUpdate.getEmail().equals(userEmail)) {
-            logger.info("userToUpdate : " + userToUpdate);
+            logger.info("userToUpdate : {}", userToUpdate);
             userToUpdate.setLastname(lastName);
             userToUpdate.setFirstname(firstName);
             userToUpdate.setPassword(password);
@@ -76,7 +76,7 @@ public class UserService {
         User userToUpdateBalance = userRepository.findByEmail(userEmail);
         // User existant.
         if (userToUpdateBalance.getEmail().equals(userEmail)) {
-            logger.info("userToUpdateBalance : " + userToUpdateBalance);
+            logger.info("userToUpdateBalance : {}", userToUpdateBalance);
             userToUpdateBalance.setBalance(amount);
             userRepository.saveAndFlush(userToUpdateBalance);
         } else {

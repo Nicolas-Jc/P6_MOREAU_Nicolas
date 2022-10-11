@@ -23,6 +23,10 @@ import java.util.List;
 public class UserTransactionController {
     private static final Logger logger = LogManager.getLogger("UserTransactionController");
 
+    private static final String REDIRECT_TRANSAC = "redirect:/transactions";
+
+    private static final String ERROR_AMOUNT = "errorAmount";
+
     @Autowired
     private UserTransactionService userTransactionService;
     @Autowired
@@ -49,7 +53,7 @@ public class UserTransactionController {
     // Fourniture données à la vue My Payments
     @GetMapping("/mypayments")
     public String myPaymentsLoad(@RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
-                                 @RequestParam(value = "size", required = false, defaultValue = "15") int size, Model model, Principal principal) {
+                                 @RequestParam(value = "size", required = false, defaultValue = "10") int size, Model model, Principal principal) {
 
         String userEmail = principal.getName();
         User userConnected = userService.getUserByEmail(userEmail);
@@ -63,7 +67,7 @@ public class UserTransactionController {
     // Fourniture données à la vue My Refunds
     @GetMapping("/myrefunds")
     public String myRefundsLoad(@RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
-                                @RequestParam(value = "size", required = false, defaultValue = "15") int size, Model model, Principal principal) {
+                                @RequestParam(value = "size", required = false, defaultValue = "10") int size, Model model, Principal principal) {
 
         String userEmail = principal.getName();
         User userConnected = userService.getUserByEmail(userEmail);
@@ -75,19 +79,37 @@ public class UserTransactionController {
 
     // Formulaire d'envoi d'argent
     @PostMapping("/sendmoney")
-    public String sendmoney(String emailReceiver, String description, Float amount,
+    public String sendmoney(String emailReceiver, String description, String amount,
                             Principal principal, RedirectAttributes redirAttrs) {
         String userEmail = principal.getName();
         User userConnected = userService.getUserByEmail(userEmail);
 
-        if (amount < 0) {
-            redirAttrs.addFlashAttribute("errorAmount", "Negative amount not possible");
-            return "redirect:/transactions";
-        }
+        try {
+            float sendMoneyToCheck = Float.parseFloat(amount);
 
-        userTransactionService.sendMoney(userConnected, emailReceiver, description, amount);
-        redirAttrs.addFlashAttribute("transactionSuccess", "OK !");
-        logger.info("User transaction sent to: {}", emailReceiver);
-        return "redirect:/transactions";
+            if (sendMoneyToCheck == 0) {
+                return REDIRECT_TRANSAC;
+            }
+
+            if (sendMoneyToCheck < 0) {
+                redirAttrs.addFlashAttribute(ERROR_AMOUNT, "Negative amount not possible");
+                return REDIRECT_TRANSAC;
+            }
+
+            Float balance = userConnected.getBalance();
+            if (sendMoneyToCheck > balance) {
+                redirAttrs.addFlashAttribute(ERROR_AMOUNT, "The amount to transfer exceeds your balance");
+                return REDIRECT_TRANSAC;
+            }
+
+            userTransactionService.sendMoney(userConnected, emailReceiver, description, sendMoneyToCheck);
+            redirAttrs.addFlashAttribute("transactionSuccess", "OK !");
+            logger.info("User transaction sent to: {}", emailReceiver);
+            return REDIRECT_TRANSAC;
+
+        } catch (NumberFormatException e) {
+            redirAttrs.addFlashAttribute(ERROR_AMOUNT, "Only numerical values are allowed");
+            return REDIRECT_TRANSAC;
+        }
     }
 }

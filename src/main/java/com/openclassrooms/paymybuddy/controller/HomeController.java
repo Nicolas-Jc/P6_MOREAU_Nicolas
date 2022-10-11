@@ -26,7 +26,10 @@ public class HomeController {
 
     static final float MAX_AMOUNT_DEPOSIT = 10000f;
 
-    private String redirectHome = "redirect:/home";
+    private static final String REDIRECT_HOME = "redirect:/home";
+    private static final String BALANCE_ATTR = "balance";
+    private static final String ERROR_AMOUNT_ATTR = "errorAmount";
+
 
     @Autowired
     BankAccountService bankAccountService;
@@ -60,7 +63,7 @@ public class HomeController {
         model.addAttribute("bankAccount", accountToFind);
         // Chargement Valeur Balance
         Float balance = connectedUser.getBalance();
-        model.addAttribute("balance", balance);
+        model.addAttribute(BALANCE_ATTR, balance);
         return "home";
     }
 
@@ -71,7 +74,7 @@ public class HomeController {
         if (bankname.isEmpty() || iban.isEmpty() || bic.isEmpty()) {
             logger.warn("All bank account fields are required");
             redirAttrs.addFlashAttribute("bankAccountNotCompleted", "All bank account fields are required");
-            return new ModelAndView(redirectHome);
+            return new ModelAndView(REDIRECT_HOME);
         }
 
         // Recherche compte bancaire pre-existant
@@ -84,7 +87,7 @@ public class HomeController {
             bankAccountService.addBankAccount(newBankAccount);
             logger.info("New bankAccount saved");
             redirAttrs.addFlashAttribute("bankAccountAdded", "OK");
-            return new ModelAndView(redirectHome);
+            return new ModelAndView(REDIRECT_HOME);
         }
 
         // compte bancaire existant => UPDATE
@@ -94,71 +97,95 @@ public class HomeController {
         bankAccountService.updateBankAccount(userBank.getBankAccount().getBankAccountId(), bankAccountToFind);
         logger.info("BankAccount updated");
         redirAttrs.addFlashAttribute("bankAccountUpdated", "OK");
-        return new ModelAndView(redirectHome);
+        return new ModelAndView(REDIRECT_HOME);
     }
 
     @PostMapping("/deposit")
-    public ModelAndView addmoney(Float depositAmount, Principal principal, RedirectAttributes redirAttrs) {
-
-        //Vérification montant max. dépôt
-        if (depositAmount > MAX_AMOUNT_DEPOSIT) {
-            logger.error("The maximum deposit amount is € 10,000");
-            redirAttrs.addFlashAttribute("errorAmount", "The maximum deposit amount is 10.000 €");
-            return new ModelAndView(redirectHome);
-        }
+    public ModelAndView addmoney(String depositAmount, Principal principal, RedirectAttributes redirAttrs) {
 
         User connectedUser = userService.getUserByEmail(principal.getName());
         BankAccount accountToFind = connectedUser.getBankAccount();
         // Pas de compte bancaire enregistré
         if (accountToFind == null) {
-            logger.error("A bank account is required for deposits and withdrawals");
-            redirAttrs.addFlashAttribute("errorAmount", "A bank account is required for deposits and withdrawals");
-            return new ModelAndView(redirectHome);
+            logger.error("Bank account required for deposits and withdrawals");
+            redirAttrs.addFlashAttribute(ERROR_AMOUNT_ATTR, "A bank account is required for deposits");
+            return new ModelAndView(REDIRECT_HOME);
         }
 
-        if (depositAmount < 0) {
-            redirAttrs.addFlashAttribute("errorAmount", "Negative amount not allowed !");
-            logger.warn("Negative amount not allowed");
-            return new ModelAndView(redirectHome);
+        try {
+            float depositToCheck = Float.parseFloat(depositAmount);
+
+            if (depositToCheck == 0) {
+                return new ModelAndView(REDIRECT_HOME);
+            }
+
+            //Vérification montant max. dépôt
+            if (depositToCheck > MAX_AMOUNT_DEPOSIT) {
+                logger.error("The maximum deposit amount is € 10,000");
+                redirAttrs.addFlashAttribute(ERROR_AMOUNT_ATTR, "The maximum deposit amount is 10.000 €");
+                return new ModelAndView(REDIRECT_HOME);
+            }
+
+            if (depositToCheck < 0) {
+                redirAttrs.addFlashAttribute(ERROR_AMOUNT_ATTR, "Negative amount not allowed !");
+                logger.warn("Negative amount not allowed");
+                return new ModelAndView(REDIRECT_HOME);
+            }
+
+            bankTransactionService.depositMoneyToBalance(connectedUser, depositToCheck);
+            redirAttrs.addFlashAttribute(BALANCE_ATTR, connectedUser);
+            redirAttrs.addFlashAttribute("transactionSuccess", "Success deposit money to balance !");
+            logger.info("Money deposited to balance");
+            return new ModelAndView(REDIRECT_HOME);
+
+        } catch (NumberFormatException e) {
+            redirAttrs.addFlashAttribute(ERROR_AMOUNT_ATTR, "Only numerical values are allowed");
+            return new ModelAndView(REDIRECT_HOME);
         }
-        bankTransactionService.depositMoneyToBalance(connectedUser, depositAmount);
-        redirAttrs.addFlashAttribute("balance", connectedUser);
-        redirAttrs.addFlashAttribute("transactionSuccess", "Success deposit money to balance !");
-        logger.info("Money deposited to balance");
-        return new ModelAndView(redirectHome);
     }
 
     @PostMapping("/withdraw")
-    public ModelAndView withdrawmoney(Float withdrawAmount, Principal principal, RedirectAttributes redirAttrs) {
+    public ModelAndView withdrawmoney(String withdrawAmount, Principal principal, RedirectAttributes redirAttrs) {
 
         User connectedUser = userService.getUserByEmail(principal.getName());
         BankAccount accountToFind = connectedUser.getBankAccount();
         // Pas de compte bancaire enregistré
         if (accountToFind == null) {
-            logger.error("A bank account is required for deposits and withdrawals");
-            redirAttrs.addFlashAttribute("errorAmount", "A bank account is required for deposits and withdrawals");
-            return new ModelAndView(redirectHome);
+            logger.error("Bank account required for deposits - withdrawals");
+            redirAttrs.addFlashAttribute(ERROR_AMOUNT_ATTR, "A bank account is required for withdrawals");
+            return new ModelAndView(REDIRECT_HOME);
         }
 
-        if (withdrawAmount < 0) {
-            redirAttrs.addFlashAttribute("errorAmount", "Negative amount not allowed !");
-            logger.warn("Negative amount not allowed");
-            return new ModelAndView(redirectHome);
-        }
+        try {
+            float withdrawToCheck = Float.parseFloat(withdrawAmount);
 
-        Float balance = connectedUser.getBalance();
+            if (withdrawToCheck == 0) {
+                return new ModelAndView(REDIRECT_HOME);
+            }
 
-        if (Float.compare(withdrawAmount, balance) > 0) {
-            redirAttrs.addFlashAttribute("errorAmount", "Withdrawal greater than available balance !");
-            logger.warn("Withdrawal greater than available balance");
-            return new ModelAndView(redirectHome);
+            if (withdrawToCheck < 0) {
+                redirAttrs.addFlashAttribute(ERROR_AMOUNT_ATTR, "Negative amount not allowed !");
+                logger.warn("Negative amount not allowed");
+                return new ModelAndView(REDIRECT_HOME);
+            }
+
+            Float balance = connectedUser.getBalance();
+
+            if (Float.compare(withdrawToCheck, balance) > 0) {
+                redirAttrs.addFlashAttribute(ERROR_AMOUNT_ATTR, "Withdrawal greater than available balance !");
+                logger.warn("Withdrawal greater than available balance");
+                return new ModelAndView(REDIRECT_HOME);
+            }
+            bankTransactionService.withdrawMoneyFromBalance(connectedUser, withdrawToCheck);
+            redirAttrs.addFlashAttribute(BALANCE_ATTR, connectedUser);
+            redirAttrs.addFlashAttribute("transactionSuccess", "Success withdraw money from balance !");
+            logger.info("Money withdraw from balance");
+            return new ModelAndView(REDIRECT_HOME);
+
+        } catch (NumberFormatException e) {
+            redirAttrs.addFlashAttribute(ERROR_AMOUNT_ATTR, "Only numerical values are allowed");
+            return new ModelAndView(REDIRECT_HOME);
         }
-        bankTransactionService.withdrawMoneyFromBalance(connectedUser, withdrawAmount);
-        redirAttrs.addFlashAttribute("balance", connectedUser);
-        redirAttrs.addFlashAttribute("transactionSuccess", "Success withdraw money from balance !");
-        logger.info("Money withdraw from balance");
-        return new ModelAndView(redirectHome);
     }
-
 
 }

@@ -1,6 +1,5 @@
 package com.openclassrooms.paymybuddy.model;
 
-//import com.sun.istack.NotNull;
 
 import javax.validation.constraints.NotNull;
 
@@ -40,25 +39,7 @@ public class User {
     @JoinColumn(name = "bank_account_Id", referencedColumnName = "bank_account_id")
     private BankAccount bankAccount;
 
-    /*@OneToMany(
-            // Toute action sur User sera propagée sur UserTransaction
-            cascade = CascadeType.ALL,
-            // Si on supprime une userTransaction de la liste, elle est supprimée de la BDD
-            orphanRemoval = true,
-            // à la récupération du User, toutes les userTransaction sont récupérées
-            fetch = FetchType.EAGER)
-    @JoinColumn(name = "receiver_id")
-    List<UserTransaction> userTransactions = new ArrayList<>();
-    */
 
-    // LAZY => à la récupération du USer, la liste des contacts n'est pas récupérée
-    // meilleures performances
-    //@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-
-    /*@OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "connection", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_contact_id"))*/
-    //@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "connection",
@@ -68,27 +49,7 @@ public class User {
                     name = "user_contact_id", referencedColumnName = "user_id"))
     private List<User> contactsList = new ArrayList<>();
 
-    // A la récupération du User, toutes les userTransactions sont récupérées
-    /*@OneToMany(
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private List<UserTransaction> userTransactions = new ArrayList<>();*/
-
-
     public User() {
-    }
-
-    public User(Integer userId, String lastname, String firstname, String email, String password, Float balance, List<UserTransaction> userTransactions, List<User> contactsList) {
-        this.userId = userId;
-        this.lastname = lastname;
-        this.firstname = firstname;
-        this.email = email;
-        this.password = password;
-        this.balance = balance;
-        //this.userTransactions = userTransactions;
-        this.contactsList = contactsList;
     }
 
     // Constructeur spécifique
@@ -156,14 +117,6 @@ public class User {
     public void setBankAccount(BankAccount bankAccount) {
         this.bankAccount = bankAccount;
     }
-
-    /*public List<UserTransaction> getUserTransactions() {
-        return userTransactions;
-    }*/
-
-    /*public void setUserTransactions(List<UserTransaction> userTransactions) {
-        this.userTransactions = userTransactions;
-    }*/
 
     public List<User> getContactsList() {
         return contactsList;

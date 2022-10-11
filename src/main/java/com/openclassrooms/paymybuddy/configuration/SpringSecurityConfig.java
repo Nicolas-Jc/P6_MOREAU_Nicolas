@@ -19,7 +19,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     CustomUserDetailService userDetailService;
 
-
     //Password Encoder
     @Bean
     public PasswordEncoder passwordEncoder() {
