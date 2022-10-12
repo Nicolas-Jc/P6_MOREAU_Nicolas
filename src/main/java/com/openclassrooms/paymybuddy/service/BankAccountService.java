@@ -15,23 +15,21 @@ public class BankAccountService {
     @Autowired
     private BankAccountRepository bankAccountRepository;
 
-    private static Logger logger = LogManager.getLogger("BankAccountService");
+    private static final Logger logger = LogManager.getLogger("BankAccountService");
 
     @Transactional
     public void addBankAccount(BankAccount bankAccount) {
 
         User userToAddBank = bankAccount.getUser();
-        // Enregistrement des informations compte bancaire sur le User
         userToAddBank.setBankAccount(bankAccount);
         logger.info("Bank account added for user in DDB");
-        // Enregistrement + commit en BDD du CpteBancaire
         bankAccountRepository.saveAndFlush(bankAccount);
     }
 
     @Transactional
     public void updateBankAccount(Integer bankAccountId, BankAccount accountToUpdate) {
         BankAccount bankAccountToFind = getBankAccountById(bankAccountId);
-        // Le compte bancaire existe
+
         if (bankAccountToFind != null) {
             bankAccountToFind.setBankName(accountToUpdate.getBankName());
             bankAccountToFind.setIban(accountToUpdate.getIban());

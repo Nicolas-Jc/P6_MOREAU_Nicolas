@@ -23,9 +23,7 @@ import java.security.Principal;
 public class HomeController {
 
     private static final Logger logger = LogManager.getLogger("HomeController");
-
     static final float MAX_AMOUNT_DEPOSIT = 10000f;
-
     private static final String REDIRECT_HOME = "redirect:/home";
     private static final String BALANCE_ATTR = "balance";
     private static final String ERROR_AMOUNT_ATTR = "errorAmount";
@@ -49,19 +47,16 @@ public class HomeController {
     public String home(Model model, Principal principal) {
         User connectedUser = userService.getUserByEmail(principal.getName());
         BankAccount accountToFind = connectedUser.getBankAccount();
-        // Pas de compte bancaire enregistré
+
         if (accountToFind == null) {
             model.addAttribute("user", connectedUser);
             logger.warn("No bank account recorded");
             return "home";
         }
-        // Existence compte bancaire
         logger.info("Loading User Information");
-        // Chargement données utilisateur
         model.addAttribute("user", connectedUser);
-        // Chargement données bancaires du User connecté
         model.addAttribute("bankAccount", accountToFind);
-        // Chargement Valeur Balance
+
         Float balance = connectedUser.getBalance();
         model.addAttribute(BALANCE_ATTR, balance);
         return "home";
@@ -70,18 +65,15 @@ public class HomeController {
     @PostMapping("/addBankAccount")
     public ModelAndView addbank(String bankname, String iban, String bic, Principal principal, RedirectAttributes redirAttrs) {
 
-        // Tests completude des 3 champs
         if (bankname.isEmpty() || iban.isEmpty() || bic.isEmpty()) {
             logger.warn("All bank account fields are required");
             redirAttrs.addFlashAttribute("bankAccountNotCompleted", "All bank account fields are required");
             return new ModelAndView(REDIRECT_HOME);
         }
 
-        // Recherche compte bancaire pre-existant
         User userBank = userService.getUserByEmail(principal.getName());
         BankAccount bankAccountToFind = userBank.getBankAccount();
 
-        // Pas de compte bancaire => CREATION
         if (bankAccountToFind == null) {
             BankAccount newBankAccount = new BankAccount(bankname, iban, bic, userBank);
             bankAccountService.addBankAccount(newBankAccount);
@@ -90,7 +82,6 @@ public class HomeController {
             return new ModelAndView(REDIRECT_HOME);
         }
 
-        // compte bancaire existant => UPDATE
         bankAccountToFind.setBankName(bankname);
         bankAccountToFind.setIban(iban);
         bankAccountToFind.setBic(bic);
@@ -105,7 +96,6 @@ public class HomeController {
 
         User connectedUser = userService.getUserByEmail(principal.getName());
         BankAccount accountToFind = connectedUser.getBankAccount();
-        // Pas de compte bancaire enregistré
         if (accountToFind == null) {
             logger.error("Bank account required for deposits and withdrawals");
             redirAttrs.addFlashAttribute(ERROR_AMOUNT_ATTR, "A bank account is required for deposits");
@@ -119,7 +109,6 @@ public class HomeController {
                 return new ModelAndView(REDIRECT_HOME);
             }
 
-            //Vérification montant max. dépôt
             if (depositToCheck > MAX_AMOUNT_DEPOSIT) {
                 logger.error("The maximum deposit amount is € 10,000");
                 redirAttrs.addFlashAttribute(ERROR_AMOUNT_ATTR, "The maximum deposit amount is 10.000 €");
@@ -149,7 +138,7 @@ public class HomeController {
 
         User connectedUser = userService.getUserByEmail(principal.getName());
         BankAccount accountToFind = connectedUser.getBankAccount();
-        // Pas de compte bancaire enregistré
+
         if (accountToFind == null) {
             logger.error("Bank account required for deposits - withdrawals");
             redirAttrs.addFlashAttribute(ERROR_AMOUNT_ATTR, "A bank account is required for withdrawals");

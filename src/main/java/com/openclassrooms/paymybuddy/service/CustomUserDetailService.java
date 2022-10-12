@@ -16,7 +16,7 @@ import java.util.Collections;
 
 @Service
 public class CustomUserDetailService implements UserDetailsService {
-    private static Logger logger = LogManager.getLogger("TransactionControllerLog");
+    private static final Logger logger = LogManager.getLogger("TransactionControllerLog");
 
     @Autowired
     UserRepository userRepository;

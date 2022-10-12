@@ -28,27 +28,12 @@ public class UserTransactionService {
 
     private static final float FEE_RATE = 0.005f;
 
-
-    public Iterable<UserTransaction> getUserTransactions() {
-        return userTransactionRepository.findAll();
-    }
-
-
-    public List<UserTransaction> getTransacsBySender(User sender) {
-        return userTransactionRepository.getUserTransactionsBySenderOrderByTransactionDateDesc(sender);
-    }
-
     public Paged<UserTransaction> getTransacsBySenderPaginated(User sender, int pageNumber, int size) {
 
         List<UserTransaction> transactionsSentList = userTransactionRepository.getUserTransactionsBySenderOrderByTransactionDateDesc(sender);
         logger.info("TransactionsSentListPaginated founded for: {}", sender);
 
-        // Appel fonction pagination
         return getTransacsPaginated(transactionsSentList, pageNumber, size);
-    }
-
-    public List<UserTransaction> getTransacsByReceiver(User receiver) {
-        return userTransactionRepository.getUserTransactionsByReceiverOrderByTransactionDateDesc(receiver);
     }
 
     public Paged<UserTransaction> getTransacsByReceiverPaginated(User sender, int pageNumber, int size) {
@@ -56,7 +41,6 @@ public class UserTransactionService {
         List<UserTransaction> transactionsReceivedList = userTransactionRepository.getUserTransactionsByReceiverOrderByTransactionDateDesc(sender);
         logger.info("TransactionsReceivedListPaginated founded for: {}", sender);
 
-        // Appel fonction pagination
         return getTransacsPaginated(transactionsReceivedList, pageNumber, size);
     }
 
@@ -76,15 +60,13 @@ public class UserTransactionService {
     @Transactional
     public void sendMoney(User sender, String emailReceiver, String description, Float amount) {
         User receiver = userService.getUserByEmail(emailReceiver);
-        // Montant des frais
+
         float feeAmount = amount * FEE_RATE;
-        // Montant envoyé Net de frais
         Float receiveAmount = amount - feeAmount;
 
         Float senderBalance = sender.getBalance();
         Float receiverBalance = receiver.getBalance();
 
-        // Mise à jour des soldes de l'expéditeur et destinataire
         sender.setBalance(senderBalance - amount);
         receiver.setBalance(receiverBalance + receiveAmount);
 

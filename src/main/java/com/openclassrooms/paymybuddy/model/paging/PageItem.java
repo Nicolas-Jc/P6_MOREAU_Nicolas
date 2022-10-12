@@ -10,9 +10,7 @@ import lombok.*;
 public class PageItem {
 
     private PageItemType pageItemType;
-
     private int index;
-
     private boolean active;
 
 }

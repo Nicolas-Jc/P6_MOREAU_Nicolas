@@ -18,25 +18,21 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class SubscribeController {
 
-    private static Logger logger = LogManager.getLogger("SubscribeController");
+    private static final Logger logger = LogManager.getLogger("SubscribeController");
 
     @Autowired
     UserService userService;
-
-    // Constructeur
 
     public SubscribeController(UserService userService) {
         this.userService = userService;
     }
 
-    // Chargement de la page:
     @GetMapping(value = "/subscribe")
     public String subscribeView(Model model) {
         model.addAttribute("user", new User());
         return "subscribe";
     }
 
-    // - create a new user
     @PostMapping(value = "/subscribe")
     public String subscribe(@Validated User user, BindingResult result, RedirectAttributes redirAttrs) {
         Boolean verifNewUser = userService.verifNewUser(user);
@@ -50,7 +46,6 @@ public class SubscribeController {
             logger.error("Error, no subscribe");
             return "redirect:/subscribe";
         }
-        // Succes création nouveau compte. Renvoi vers page de connexion
         redirAttrs.addFlashAttribute("success", "Success!");
         userService.addUser(user);
         logger.info("New user saved : {}", user);

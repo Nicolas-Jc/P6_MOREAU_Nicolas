@@ -22,9 +22,7 @@ import java.util.List;
 @Controller
 public class UserTransactionController {
     private static final Logger logger = LogManager.getLogger("UserTransactionController");
-
     private static final String REDIRECT_TRANSAC = "redirect:/transactions";
-
     private static final String ERROR_AMOUNT = "errorAmount";
 
     @Autowired
@@ -32,13 +30,11 @@ public class UserTransactionController {
     @Autowired
     private UserService userService;
 
-    // Constructeur
     public UserTransactionController(UserService userService, UserTransactionService userTransactionService) {
         this.userService = userService;
         this.userTransactionService = userTransactionService;
     }
 
-    // Fourniture données à la vue Transactions
     @GetMapping("/transactions")
     public String transactionsLoad(Model model, Principal principal) {
         String userEmail = principal.getName();
@@ -50,7 +46,6 @@ public class UserTransactionController {
         return "transactions";
     }
 
-    // Fourniture données à la vue My Payments
     @GetMapping("/mypayments")
     public String myPaymentsLoad(@RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
                                  @RequestParam(value = "size", required = false, defaultValue = "10") int size, Model model, Principal principal) {
@@ -64,7 +59,6 @@ public class UserTransactionController {
         return "mypayments";
     }
 
-    // Fourniture données à la vue My Refunds
     @GetMapping("/myrefunds")
     public String myRefundsLoad(@RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
                                 @RequestParam(value = "size", required = false, defaultValue = "10") int size, Model model, Principal principal) {
@@ -77,7 +71,6 @@ public class UserTransactionController {
         return "myrefunds";
     }
 
-    // Formulaire d'envoi d'argent
     @PostMapping("/sendmoney")
     public String sendmoney(String emailReceiver, String description, String amount,
                             Principal principal, RedirectAttributes redirAttrs) {

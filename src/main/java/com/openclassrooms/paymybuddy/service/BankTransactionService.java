@@ -27,7 +27,6 @@ public class BankTransactionService {
 
     @Transactional
     public void depositMoneyToBalance(User user, Float deposit) {
-        // ETAPE 1 : Création et enregistrement Transaction
         BankTransaction bankTransaction = new BankTransaction();
 
         LocalDateTime dateTime = LocalDateTime.now();
@@ -39,7 +38,6 @@ public class BankTransactionService {
         bankTransactionRepository.saveAndFlush(bankTransaction);
         logger.info("bank transaction DEPOSIT saved in DBB");
 
-        // ETAPE 2 : Mise à jour Balance
         Float balance = user.getBalance() + deposit;
         user.setBalance(balance);
         userRepository.saveAndFlush(user);
@@ -49,7 +47,6 @@ public class BankTransactionService {
 
     @Transactional
     public void withdrawMoneyFromBalance(User user, Float withdraw) {
-        // ETAPE 1 : Création et enregistrement Transaction
         BankTransaction bankTransaction = new BankTransaction();
 
         LocalDateTime dateTime = LocalDateTime.now();
@@ -61,7 +58,6 @@ public class BankTransactionService {
         bankTransactionRepository.saveAndFlush(bankTransaction);
         logger.info("bank transaction WITHDRAW saved in DBB");
 
-        // ETAPE 2 : Mise à jour Balance
         Float balance = user.getBalance() - withdraw;
         user.setBalance(balance);
         userRepository.saveAndFlush(user);
