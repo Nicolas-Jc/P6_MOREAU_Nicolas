@@ -52,7 +52,7 @@
                 <h4 class="text-start">Send Money</h4>
                 <form th:action="@{/sendmoney}" method="post" th:object="${transaction}">
                     <div class="input-group input-group-sm mb-4">
-                        <span class="input-group-text col-3 justify-content-center"
+                        <span class="input-group-text col-3 justify-content-center fw-bold"
                               th:text="${#numbers.formatDecimal(user.balance,1,'WHITESPACE',2,'POINT')}"></span>
                         <span class="input-group-text"> € </span>
                         <input type="text" class="form-control" name="amount" placeholder="1.00" required>

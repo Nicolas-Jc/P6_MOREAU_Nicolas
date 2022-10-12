@@ -13,27 +13,19 @@ USE pay_my_buddy;
 When the application is run for the first time, the tables will be created automatically using Spring Boot and Spring
 Data,
 
-## Endpoints
+# Endpoints
 
 - **Application:**  http://localhost:9091/ - Login with "User" + generated password
 
-## Security
+# Security
 
 - The user passwords are encrypted with BCryptPasswordEncoder (Spring Security).
 
 ## UML DIAGRAM CLASS
 
-Screenshot[![](C:\Users\A151UJ\OCR\OCR_Projets\P6_MOREAU_Nicolas_PayMyBuddy\DiagramModel\ClassDiagram.png)]()
+![UML Diagram Class](DiagramModel/ClassDiagram.png)
 
 ## MPD
 
-![Screenshot](MPD.png)
-
-## Business model
-
-![Screenshot](Modele_metier.png)
-
-## Java model
-
-![Screenshot](Modele_java.png)
+![Physical Data Model](DiagramModel/PhysicalModel.png)
 
