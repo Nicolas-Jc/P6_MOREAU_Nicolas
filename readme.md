@@ -10,6 +10,12 @@ CREATE DATABASE pay_my_buddy;
 
 USE pay_my_buddy;
 
+In your IDE, add 3 environment variables (see file "application.properties"):
+
+- DB_URL : Your JDBC connection string
+- DB_USER : Your User Name
+- DB_PASSWORD : Your Password
+
 When the application is run for the first time, the tables will be created automatically using Spring Boot and Spring
 Data,
 
